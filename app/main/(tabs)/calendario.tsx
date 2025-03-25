@@ -1,17 +1,28 @@
 import { Text, View, ImageBackground, StyleSheet } from 'react-native';
+
 import { CalendarBody, CalendarContainer, CalendarHeader, LocaleConfigsProps } from '@howljs/calendar-kit';
+
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+
 import { Link } from 'expo-router';
 import { Dimensions } from 'react-native';
 
+
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { useState } from 'react';
+
 /*
-=======calendario
+==========================calendario===========================
 https://howljs.github.io/react-native-calendar-kit/docs/intro
-meio quebrado^ mas funciona
-====================================
+meio quebrado^ mas funciona ------ REMOVER SE FOR MANTER O NOVO
+===============================================================
+https://wix.github.io/react-native-calendars/docs/Intro
+novo^
 */
 
 export default function Calendario() {
-  
+  /*Calendario antigo
   const initialLocales: Record<string, Partial<LocaleConfigsProps>> = {
     en: {
       weekDayShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'), // Text in day header (Sun, Mon, etc.)
@@ -34,7 +45,6 @@ export default function Calendario() {
       more: 'mais',
     },
   };
-
   return (
     <ImageBackground
     source={require('@/assets/images/focavestbkg.jpg')}
@@ -57,14 +67,44 @@ export default function Calendario() {
 
       </View>
     </ImageBackground>
+  );*/
+
+  const [selected, setSelected] = useState('');
+  return(
+    <SafeAreaView style={styles.container} >
+      
+      
+      <ImageBackground source={require('@/assets/images/focavestbkg.jpg')} style={styles.backgroundImg} resizeMode='cover'>
+
+          <Text style={{marginTop: '15%'}}>Hello</Text>
+
+          <View style={styles.calendarView}>
+            <Calendar
+              onDayPress={day => {
+                setSelected(day.dateString);
+              }}
+              markedDates={{
+                [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}
+              }}
+            />
+          </View>
+
+          <Link href="/" style={styles.button}>
+            Voltar
+          </Link>
+
+      </ImageBackground>
+
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   backgroundImg: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   button: {
     fontSize: 20,
@@ -74,6 +114,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   calendarView: {
-    height: '60%',
+    marginTop: '5%',
   }
 });
