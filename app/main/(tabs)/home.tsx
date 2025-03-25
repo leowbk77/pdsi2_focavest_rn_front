@@ -1,27 +1,31 @@
-import { Text, View, ImageBackground, StyleSheet } from 'react-native';
- import { Link } from 'expo-router'; 
+import { Text, View,StyleSheet,  } from 'react-native';
+import ModularBox from '@/components/ModularBox';
+
+//teste - correcao do overlap da barra de status no android
+import {Platform, StatusBar } from 'react-native';
+const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
+//teste
 
 export default function Home() {
   return (
-    <ImageBackground
-    source={require('@/assets/images/focavestbkg.jpg')}
-    style={styles.backgroundImg}
-    resizeMode='cover'>
-      <View>
+      <View style={styles.mainView}>
         <Text style={styles.text}>Home screen</Text>
-        <Link href="/" style={styles.button}>
-          Voltar
-        </Link>
+
+        <ModularBox></ModularBox>
+        <ModularBox></ModularBox>
+        <ModularBox></ModularBox>
+        <ModularBox></ModularBox>
+
       </View>
-    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  backgroundImg: {
+  mainView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    margin: '5%',
+    justifyContent: 'space-between',
+    paddingTop: top,
   },
   text: {
     color: 'black',

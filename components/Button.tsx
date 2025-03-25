@@ -1,6 +1,8 @@
 import { PropsWithChildren } from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
 
+/* Componente de teste - nao usado mais*/
+
 type Props = PropsWithChildren<{
     title: string
 }>;

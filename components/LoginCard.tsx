@@ -1,14 +1,13 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { StyleSheet, Text, View, Button} from "react-native";
+import { Link, router } from "expo-router";
 import LoginInput from "./LoginInput";
-import Button from "./Button";
 
 const LoginCard = () => {
     return (
         <View style={styles.container}>
             <LoginInput placeholderTxt="Login"/>
             <LoginInput placeholderTxt="Password"/>
-            <Button title="Login"></Button>
+            <Button title="Login" onPress={() => router.push("/main/(tabs)/home")} color={"#82BFAB"} />
             <Text style={styles.txt}>
                 Não registrado?
                 <Link href="/sign-up" style={styles.link}> Registre-se</Link>
@@ -26,6 +25,7 @@ const styles = StyleSheet.create({
     },
     txt: {
         marginLeft: '5%',
+        marginTop: '4%',
         color: 'white'
     },
     link: {
