@@ -15,6 +15,7 @@ meio quebrado^ mas funciona ------ REMOVER SE FOR MANTER O NOVO
 ===============================================================
 https://wix.github.io/react-native-calendars/docs/Intro
 novo^
+===============================================================
 */
 
 export default function Calendario() {
@@ -25,7 +26,7 @@ export default function Calendario() {
 
           <View style={styles.calendarView}>
 
-            {/* Criar um componente separado -  */}
+            {/* Criar uma view*/}
             <CalendarProvider date={'2025-03-25'}>
               <ExpandableCalendar onDayPress={day => setSelected(day.dateString)}/>
               <TimelineList events={eventsTlList} showNowIndicator={true}/>
