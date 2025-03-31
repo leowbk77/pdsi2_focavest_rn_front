@@ -24,9 +24,7 @@ const HomeScreen = () => {
               <Text>Atividades diárias</Text>
             </View>
 
-            <View>
-
-            </View>
+            <ModularBox />
 
         </View>
     );
@@ -39,7 +37,6 @@ const styles = StyleSheet.create({
     paddingTop: top,
   },
   header: {
-    color: '#82BFAB',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -56,7 +53,8 @@ const styles = StyleSheet.create({
   },
   welcome: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom: '5%'
   },
   hr: {
       borderBottomColor: colors.primary,

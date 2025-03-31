@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { colors } from '@/styles/color';
 
 /* ICONES
@@ -13,6 +14,7 @@ import { colors } from '@/styles/color';
 export default function TabLayout() {
   return (
     <Tabs screenOptions={{tabBarActiveTintColor: '#616E7D'}}>
+        
       <Tabs.Screen 
         name="home" 
         options={{ 
@@ -28,6 +30,15 @@ export default function TabLayout() {
           title: 'Calendario',
           headerShown: false,
           tabBarIcon: () => <Ionicons name="calendar-number-sharp" size={24} color={colors.primary} />  
+        }} 
+      />
+
+      <Tabs.Screen 
+        name="rotinas" 
+        options={{ 
+          title: 'Rotinas', 
+          headerShown: false,
+          tabBarIcon: () => <FontAwesome5 name="calendar-plus" size={24} color={colors.primary} />
         }} 
       />
 

@@ -17,9 +17,11 @@ https://wix.github.io/react-native-calendars/docs/Intro
 novo^
 ===============================================================
 */
+const eventsTlList = {'2025-03-31': [{start: '2025-03-31 09:20:00', end: '2025-03-31 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+                                      {start: '2025-03-31 20:00:00', end: '2025-03-31 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]}; // mockup
+  
 
 export default function Calendario() {
-  const eventsTlList = {'2025-03-25': [{start: '2025-03-25 09:20:00', end: '2025-03-25 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}]}; // mockup
   const [selected, setSelected] = useState(''); 
   return(
     <SafeAreaView style={styles.container} >
