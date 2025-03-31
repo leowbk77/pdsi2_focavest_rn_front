@@ -1,4 +1,5 @@
 import { View, StyleSheet, Pressable, Text } from "react-native";
+import { colors } from "@/styles/color";
 
 const ModularBox = () => {
     return (
@@ -7,11 +8,11 @@ const ModularBox = () => {
             <View style={styles.boxButtons}>
 
                 <Pressable>
-                    <Text style={{color: '#82BFAB'}}>X</Text>
+                    <Text style={{color: colors.primary}}>X</Text>
                 </Pressable>
                 {/* BOTOES TEMPORARIOS */}
                 <Pressable>
-                    <Text style={{color: '#82BFAB'}}>+</Text>
+                    <Text style={{color: colors.primary}}>+</Text>
                 </Pressable>
 
             </View>

@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { colors } from '@/styles/color';
 
 /* ICONES
   https://icons.expo.fyi/
@@ -17,7 +18,7 @@ export default function TabLayout() {
         options={{ 
           title: 'Home', 
           headerShown: false,
-          tabBarIcon: () => <Ionicons name="home-sharp" size={24} color="#82BFAB" />
+          tabBarIcon: () => <Ionicons name="home-sharp" size={24} color={colors.primary} />
         }} 
       />
 
@@ -26,7 +27,7 @@ export default function TabLayout() {
         options={{
           title: 'Calendario',
           headerShown: false,
-          tabBarIcon: () => <Ionicons name="calendar-number-sharp" size={24} color="#82BFAB" />  
+          tabBarIcon: () => <Ionicons name="calendar-number-sharp" size={24} color={colors.primary} />  
         }} 
       />
 
@@ -35,7 +36,7 @@ export default function TabLayout() {
         options={{ 
           title: 'Perfil',
           headerShown: false,
-          tabBarIcon: () => <Ionicons name="person-circle-sharp" size={24} color="#82BFAB" />
+          tabBarIcon: () => <Ionicons name="person-circle-sharp" size={24} color={colors.primary} />
         }} 
       />
 
