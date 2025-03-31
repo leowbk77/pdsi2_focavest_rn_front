@@ -19,7 +19,6 @@ novo^
 */
 const eventsTlList = {'2025-03-31': [{start: '2025-03-31 09:20:00', end: '2025-03-31 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
                                       {start: '2025-03-31 20:00:00', end: '2025-03-31 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]}; // mockup
-  
 
 export default function Calendario() {
   const [selected, setSelected] = useState(''); 
@@ -31,7 +30,7 @@ export default function Calendario() {
             {/* Criar uma view*/}
             <CalendarProvider date={'2025-03-25'}>
               <ExpandableCalendar onDayPress={day => setSelected(day.dateString)}/>
-              <TimelineList events={eventsTlList} showNowIndicator={true}/>
+              <TimelineList events={eventsTlList} showNowIndicator={true} scrollToFirst={true}/>
             </CalendarProvider>
 
           </View>

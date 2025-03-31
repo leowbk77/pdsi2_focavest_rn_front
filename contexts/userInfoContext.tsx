@@ -36,18 +36,18 @@ export const UserInfoContextProvider = ({children,}: UserInfoProviderProps) => {
 
     const fetchUserData = async (user: string) => {
         try {
-          const response = await api.get(`/cat`);
-          const imgData = response.data;
-        
-          setUserName(user); // temporario
-          setUserAge('24'); // temporario
-          setUserCursos(['BSI','BCC']); // temporario
-          setUserImage(imgData);
-          setUserCity('Uberlandia'); // temporario
+          const studentResponse = await api.get("/api/alunos");
+          const studentData = studentResponse.data;
+    
+          setUserName(studentData[0].nome); // temporario
+          setUserAge("24"); // temporario
+          setUserCursos(studentData[0].cursos_desejados); // temporario
+          // setUserImage(imgData);
+          setUserCity("Uberlandia"); // temporario
         } catch (error) {
           console.error("Erro ao buscar dados do usuário:", error);
         }
-    };
+      };
 
     return (
         <UserInfoContext.Provider value={{ 
