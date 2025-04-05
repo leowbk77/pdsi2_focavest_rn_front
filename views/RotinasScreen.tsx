@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Image } from 'expo-image';
 import { colors } from '@/styles/color';
@@ -22,6 +22,7 @@ const RotinasScreen = () => {
             <View>
                 <RotinaBox />
             </View>
+            
 
         </View>
     );

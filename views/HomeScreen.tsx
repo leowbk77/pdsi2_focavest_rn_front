@@ -33,8 +33,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   mainView: {
     flex: 1,
-    margin: '5%',
-    paddingTop: top,
+    padding: '5%',
   },
   header: {
     flex: 1,

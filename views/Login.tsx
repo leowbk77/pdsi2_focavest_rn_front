@@ -39,7 +39,7 @@ const Login = () => {
                 <Link href="/sign-up" style={styles.link}> Esqueceu a senha?</Link>
               </View>
 
-              <Button title="Entrar" onPress={() => router.push("/main/(tabs)/home")} color={colors.primary} />
+              <Button title="Entrar" onPress={() => router.push("/(main)/home")} color={colors.primary} />
 
             </View>
 

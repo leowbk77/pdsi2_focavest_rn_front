@@ -70,7 +70,8 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
     mainView: {
-        padding: '5%'
+        flex: 1,
+        padding: '5%',
     },
     header: {
         flex: 1,
@@ -78,7 +79,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingTop: top,
         paddingBottom: '5%',
-        minHeight: '25%',
+        minHeight: '10%',
+        maxHeight: '12%',
     },
     userInfoView: {
         flexDirection: 'row',
