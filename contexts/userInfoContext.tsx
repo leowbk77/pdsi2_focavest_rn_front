@@ -18,13 +18,35 @@ interface UserInfoContextType {
     setUserImage: (image: string | null) => void;
 
     fetchUserData: (userId: string) => Promise<void>;
+
+    fetchUserInfoFromJson: () => Promise<void>;
+}
+
+interface NextVestContextType {
+  data: string;
+  setData: (dataStr: string) => void;
+
+  pfp: string;
+  setPfp: (pfpStr: string) => void;
+
+  uni: string;
+  setUni: (uniStr: string) => void;
+
+  curso: string;
+  setCurso: (cursoStr: string) => void;
+
+  site: string;
+  setSite: (siteStr: string) => void;
+
+  fetchNextVestInfoFromJson: () => Promise<void>;
 }
 
 interface UserInfoProviderProps {
     children: ReactNode;
 };
 
-export const UserInfoContext = createContext<UserInfoContextType | undefined>(undefined);
+type ContextType = UserInfoContextType & NextVestContextType;
+export const UserInfoContext = createContext<ContextType | undefined>(undefined);
 
 export const UserInfoContextProvider = ({children,}: UserInfoProviderProps) => {
     const [userName, setUserName] = useState("");
@@ -32,6 +54,12 @@ export const UserInfoContextProvider = ({children,}: UserInfoProviderProps) => {
     const [userCity, setUserCity] = useState("");
     const [userCursos, setUserCursos] = useState<string[]>([]);
     const [userImage, setUserImage] = useState<string | null>(null);
+
+    const [data, setData] = useState("");
+    const [pfp, setPfp] = useState("");
+    const [uni, setUni] = useState("");
+    const [curso, setCurso] = useState("");
+    const [site, setSite] = useState("");
     
 
     const fetchUserData = async (user: string) => {
@@ -49,6 +77,31 @@ export const UserInfoContextProvider = ({children,}: UserInfoProviderProps) => {
         }
       };
 
+    
+    const fetchUserInfoFromJson = async () => {
+      try {
+        const userInfoJson = require("@/assets/temp/json/usuario.json");
+        setUserName(userInfoJson.nome);
+        setUserAge(userInfoJson.idade);
+        setUserCity(userInfoJson.cidade);
+        setUserCursos(userInfoJson.cursosDesejados.join(", "));
+      } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
+      }
+    };
+
+    const fetchNextVestInfoFromJson = async () => {
+      try {
+        const userInfoJson = require("@/assets/temp/json/prox_vest.json");
+        setData(userInfoJson.data);
+        setPfp(userInfoJson.pfp);
+        setUni(userInfoJson.universidade);
+        setCurso(userInfoJson.curso_desejado);
+        setSite(userInfoJson.site);
+      } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
+      }
+    };
     return (
         <UserInfoContext.Provider value={{ 
             userName, setUserName, 
@@ -57,6 +110,11 @@ export const UserInfoContextProvider = ({children,}: UserInfoProviderProps) => {
             userImage, setUserImage,
             userCity, setUserCity,
             fetchUserData, 
+            fetchUserInfoFromJson,
+            data, pfp,
+            uni, curso,
+            site,
+            fetchNextVestInfoFromJson,
             }}>
             {children}
         </UserInfoContext.Provider>

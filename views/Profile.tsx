@@ -12,10 +12,17 @@ const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
 const Profile = () => {
 
-    const {userName, userImage, userCursos, userAge, userCity, fetchUserData} = useUserInfo();
+    const {userName, userCursos, 
+            userAge, userCity, 
+            fetchUserData, fetchUserInfoFromJson,
+            data, pfp,
+            uni, curso, site,
+            fetchNextVestInfoFromJson} = useUserInfo();
 
     useEffect(() => {
-        fetchUserData('Lucas'); // temporario
+        // fetchUserData('Lucas');
+        fetchUserInfoFromJson();
+        fetchNextVestInfoFromJson();
     }, []);
 
     return (
@@ -45,11 +52,11 @@ const Profile = () => {
                 </View>
 
                 <View style={styles.nextVest}>
-                    <Image source="https://feciv.ufu.br/sites/feciv.ufu.br/files/ufu.png" style={styles.imgPfp}/>
+                    <Image source={pfp} style={styles.imgPfpSm}/>
                     <View style={styles.nextVestInfoView}>
-                        <Text style={styles.h2}>Universidade: <Text style={styles.txt}>Universidade Federal de Uberlandia{}</Text></Text>
-                        <Text style={styles.h2}>Curso desejado: <Text style={styles.txt}>BSI{}</Text></Text>
-                        <Text style={styles.h2}>Site: <Text style={styles.txt}>ufu.br/{}</Text></Text>
+                        <Text style={styles.h2}>Universidade: <Text style={styles.txt}>{uni}</Text></Text>
+                        <Text style={styles.h2}>Curso desejado: <Text style={styles.txt}>{curso}</Text></Text>
+                        <Text style={styles.h2}>Site: <Text style={styles.txt}>{site}</Text></Text>
                     </View>
                 </View>
             </View>
@@ -109,6 +116,11 @@ const styles = StyleSheet.create({
     imgPfp: {
         width: 100, 
         height: 100, 
+        borderRadius: 10,
+    },
+    imgPfpSm: {
+        width: 50, 
+        height: 50, 
         borderRadius: 10,
     },
     icon: {

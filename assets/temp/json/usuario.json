@@ -1,0 +1,11 @@
+{
+  "nome": "João da Silva",
+  "idade": 25,
+  "cidade": "São Paulo",
+  "email": "joao.silva@email.com",
+  "cursosDesejados": [
+    "Ciência da Computação",
+    "Engenharia de Software",
+    "Análise e Desenvolvimento de Sistemas"
+  ]
+}
