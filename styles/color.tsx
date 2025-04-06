@@ -4,4 +4,5 @@ export const colors = {
     secondary: '#FFFFFF',
     headerText: '#20132C',
     text: '#616E7D',
+    placeholderText: 'rgba(26 28 30 / .2)',
 };

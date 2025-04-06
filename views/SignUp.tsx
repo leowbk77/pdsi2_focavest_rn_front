@@ -27,23 +27,23 @@ const SignUp = () => {
               <View>
                 <View>
                   <Text>Nome</Text>
-                  <TextInput style={styles.input} placeholder="" ></TextInput>
+                  <TextInput style={styles.input} placeholder="" placeholderTextColor={colors.placeholderText}></TextInput>
                 </View>
                 <View>
                   <Text>E-mail</Text>
-                  <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email"></TextInput>
+                  <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email" placeholderTextColor={colors.placeholderText}></TextInput>
                 </View>
                 <View>
                   <Text>Senha</Text>
-                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true}></TextInput>
+                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} placeholderTextColor={colors.placeholderText}></TextInput>
                 </View>
                 <View>
                   <Text>Repita a senha</Text>
-                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true}></TextInput>
+                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} placeholderTextColor={colors.placeholderText}></TextInput>
                 </View>
               </View>
 
-              <Button title='Registrar' onPress={() => router.push("/login")} color={colors.primary}/>
+              <Button title='Registrar' onPress={() => router.push("/login")} color={colors.primary} />
 
             </View>
 
@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
     backgroundImg: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      padding: '5%'
     },
     titleView: {
       paddingBottom: '10%',
@@ -68,20 +69,14 @@ const styles = StyleSheet.create({
     container: {
       backgroundColor: colors.secondary,
       borderRadius: 20,
-      width: '90%',
-      minHeight: '50%',
-      maxHeight: '90%',
       padding: '5%',
-    },
-    txt: {
-        marginLeft: '5%',
-        color: 'white'
+      width: '100%',
     },
     link: {
         color: colors.primary
     },
     input: {
-        color: 'rgba(26 28 30 / .2)',
+        color: colors.text,
         height: 50,
         marginBottom: '5%',
         borderRadius: 10,

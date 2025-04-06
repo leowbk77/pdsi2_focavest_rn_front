@@ -13,6 +13,15 @@ export default function RootLayout() {
     
     <UserInfoContextProvider>
       <Stack initialRouteName="login">
+        
+        <Stack.Screen 
+          name="config"
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+          }}
+        />
+
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="index"  options={{ headerShown: false }} />
         <Stack.Screen name="(main)"  options={{ headerShown: false }} />

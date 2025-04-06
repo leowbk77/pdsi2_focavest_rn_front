@@ -4,28 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   return (
-  
     <Redirect href={'/login'}/>
-
-    /*
-    <SafeAreaView style={styles.container}>
-      <View>
-        <View style={styles.viewBtn}>
-          <Button title="Tela de Login" onPress={() => router.push("/login")} color={"#82BFAB"}/>
-        </View>
-        <View style={styles.viewBtn}>
-          <Button title="Tela de Sign-up" onPress={() => router.push("/sign-up")} color={"#82BFAB"}/>
-        </View>
-        <View style={styles.viewBtn}>
-          <Button title="Tela Principal" onPress={() => router.push("/main/(tabs)/home")} color={"#82BFAB"}/>
-        </View>
-        <View style={styles.viewBtn}>
-          <Button title="Tela inexistente (teste)" onPress={() => router.push("/inexistente")} color={"#82BFAB"}/>
-        </View>
-      </View>
-    </SafeAreaView>
-     */
-
   );
 }
 

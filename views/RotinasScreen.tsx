@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import { colors } from '@/styles/color';
 
 import RotinaBox from "@/components/RotinaBox";
+import MainButton from "@/components/MainButton";
 
 import {Platform, StatusBar } from 'react-native';
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
@@ -14,13 +15,13 @@ const RotinasScreen = () => {
 
             <View style={styles.header}>
                 <Image style={styles.imgsize} source={require('@/assets/images/FocaVestPLogo.png')} contentFit='contain'/>
-                <FontAwesome5 name="plus" size={20} color={colors.primary} style={styles.icon}/>
+                <FontAwesome5 name="plus" size={24} color={colors.primary} style={styles.icon}/>
             </View>
 
             <Text style={styles.h1}>ROTINAS</Text>
 
             <View>
-                <RotinaBox />
+                <RotinaBox></RotinaBox>
             </View>
             
 
@@ -38,16 +39,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingTop: top,
         paddingBottom: '5%',
-        height: 50,
     },
     h1: {
         color: colors.headerText,
         fontSize: 16,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: '5%',
+        marginBottom: '5%',
     },
     imgsize: {
-        width: '20%',
+        width: '15%',
     },
     icon: {
         alignSelf: 'center',

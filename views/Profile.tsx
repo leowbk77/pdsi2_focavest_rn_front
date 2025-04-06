@@ -5,7 +5,7 @@ import { colors } from '@/styles/color';
 
 import { useUserInfo } from '@/contexts/userInfoContext';
 import { useEffect } from 'react';
-
+import { Link } from 'expo-router';
 
 import {Platform, StatusBar } from 'react-native';
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
@@ -30,7 +30,10 @@ const Profile = () => {
 
             <View style={styles.header}>
                 <Image style={styles.imgsize} source={require('@/assets/images/FocaVestPLogo.png')} contentFit='contain'/>
-                <FontAwesome name="gear" size={24} color={colors.primary} style={styles.icon}/>
+                <Link href={'/config'}>
+                    <FontAwesome name="gear" size={24} color={colors.primary} style={styles.icon}/>
+                </Link>
+                
             </View>
 
             <View style={styles.userInfoView}>

@@ -1,16 +1,18 @@
 import { PropsWithChildren } from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
-
-/* Componente de teste - nao usado mais*/
+import { colors } from "@/styles/color";
 
 type Props = PropsWithChildren<{
-    title: string
+    title: string,
+    onPress?: () => void,
+    disable?: boolean,
 }>;
 
-const Button = ({title}: Props) => {
+const MainButton = ({title, children, onPress = () => {}, disable = false}: Props) => {
     return (
-    <Pressable style={styles.btn}>
+    <Pressable style={styles.btn} onPress={onPress} disabled={disable}>
         <Text style={styles.title}>{title}</Text>
+        {children}
     </Pressable>
     );
 };
@@ -18,18 +20,17 @@ const Button = ({title}: Props) => {
 // https://reactnative.dev/docs/text-style-props
 const styles = StyleSheet.create({
     btn: {
-        backgroundColor: '#82BFAB',
+        backgroundColor: colors.primary,
         borderRadius: 10,
         minHeight: '10%',
-        maxHeight: '15%',
-        margin: '5%',
         justifyContent: 'center',
         alignItems: 'center'
     },
     title: {
         color: 'white',
         textAlign: 'center',
+        fontWeight: 'bold',
     }
 });
 
-export default Button;
+export default MainButton;

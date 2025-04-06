@@ -1,4 +1,4 @@
-import { StyleSheet, ImageBackground, Text, View, Button, TextInput } from "react-native";
+import { StyleSheet, ImageBackground, Text, View, Button, TextInput, ScrollView } from "react-native";
 import { Link, router } from "expo-router";
 import { Image } from 'expo-image';
 import { colors } from "@/styles/color";
@@ -9,13 +9,13 @@ const Login = () => {
         source={require('@/assets/images/focavestbkg.jpg')}
         style={styles.backgroundImg}
         resizeMode='cover'>
-
+          
             <View style={styles.headerImg}>
               <Image style={styles.imgsize} source={require('@/assets/images/FocaVestWLogo.png')} contentFit='fill'/>
             </View>
 
             <View style={styles.loginContainer}>
-
+              
               <View style={styles.titleView}>
                 <Text style={styles.headerTitleTxt}>Login</Text>
                 <Text style={styles.headerTxt}>Não tem uma conta? <Link href="/sign-up" style={styles.link}> Registre-se</Link> </Text>
@@ -24,12 +24,12 @@ const Login = () => {
               <View style={styles.inputsView}>
                 <View>
                   <Text>Email</Text>
-                  <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email"></TextInput>
+                  <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email" placeholderTextColor={colors.placeholderText}></TextInput>
                 </View>
                 <View>
                   <Text>Password</Text>
                   {/* https://www.geeksforgeeks.org/how-to-show-and-hide-password-in-react-native/ */}
-                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true}></TextInput>
+                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} placeholderTextColor={colors.placeholderText}></TextInput>
                 </View>
               </View>
 
@@ -50,8 +50,7 @@ const Login = () => {
 const styles = StyleSheet.create({
   backgroundImg: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   titleView: {
     alignItems: 'center',
@@ -68,8 +67,6 @@ const styles = StyleSheet.create({
   loginContainer: {
       backgroundColor: colors.secondary,
       borderRadius: 20,
-      width: '90%',
-      height: '50%',
       padding: '5%',
   },
   txt: {
@@ -83,7 +80,7 @@ const styles = StyleSheet.create({
       color: colors.primary,
   },
   input: {
-      color: 'rgba(26 28 30 / .2)',
+      color: colors.text,
       height: 50,
       marginBottom: '5%',
       borderRadius: 10,
@@ -96,13 +93,14 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   headerImg: {
-    alignItems: 'center',
-    width: '20%',
-    height: '10%'
+    width: '25%',
+    height: '10%',
+    marginTop: '10%',
+    marginBottom: '10%'
   },
   imgsize: {
     width: '100%',
-    height: '70%',
+    height: '100%',
   },
 });
 
