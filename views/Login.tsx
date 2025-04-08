@@ -1,9 +1,21 @@
 import { StyleSheet, ImageBackground, Text, View, Button, TextInput, ScrollView } from "react-native";
+import { useState } from "react";
+import { useAuth } from "@/contexts/AutenticacaoContext";
 import { Link, router } from "expo-router";
 import { Image } from 'expo-image';
 import { colors } from "@/styles/color";
+import MainButton from "@/components/MainButton";
 
 const Login = () => {
+    const {login} = useAuth();
+    const [email, setEmail] = useState("");
+    const [pw, setPw] = useState("");
+
+    const loginApp = async () => {
+      await login(email, pw);
+      router.replace('/');
+    };
+
     return (
         <ImageBackground
         source={require('@/assets/images/focavestbkg.jpg')}
@@ -24,12 +36,12 @@ const Login = () => {
               <View style={styles.inputsView}>
                 <View>
                   <Text>Email</Text>
-                  <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email" placeholderTextColor={colors.placeholderText}></TextInput>
+                  <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email" onChangeText={setEmail} placeholderTextColor={colors.placeholderText} />
                 </View>
                 <View>
                   <Text>Password</Text>
                   {/* https://www.geeksforgeeks.org/how-to-show-and-hide-password-in-react-native/ */}
-                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} placeholderTextColor={colors.placeholderText}></TextInput>
+                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} onChangeText={setPw} placeholderTextColor={colors.placeholderText} />
                 </View>
               </View>
 
@@ -40,6 +52,11 @@ const Login = () => {
               </View>
 
               <Button title="Entrar" onPress={() => router.push("/(main)/home")} color={colors.primary} />
+
+              <View style={{marginTop: 10}}>
+                <MainButton title="Entrar" onPress={loginApp} disable={false}/>
+              </View>
+              
 
             </View>
 
