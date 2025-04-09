@@ -5,6 +5,7 @@ import { colors } from '@/styles/color';
 
 import RotinaBox from "@/components/RotinaBox";
 import MainButton from "@/components/MainButton";
+import InputBox from "@/components/InputBox";
 
 import {Platform, StatusBar } from 'react-native';
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
@@ -24,6 +25,9 @@ const RotinasScreen = () => {
                 <RotinaBox></RotinaBox>
             </View>
             
+            <View style={styles.temp}>
+                <InputBox title={'Input'} bkgColor="white"></InputBox>
+            </View>
 
         </View>
     );
@@ -33,6 +37,7 @@ const styles = StyleSheet.create({
     mainView: {
         flex: 1,
         padding: '5%',
+        backgroundColor: 'white',
     },
     header: {
         flexDirection: 'row',
@@ -54,6 +59,9 @@ const styles = StyleSheet.create({
     icon: {
         alignSelf: 'center',
     },
+    temp: {
+        height: '20%'
+    }
 });
 
 export default RotinasScreen;

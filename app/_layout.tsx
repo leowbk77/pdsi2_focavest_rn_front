@@ -8,7 +8,7 @@ import { colors } from "@/styles/color";
 export default function RootLayout() {
   return (
   <>
-    <StatusBar style='dark' backgroundColor={colors.secondary}/>
+    <StatusBar style='light' backgroundColor={colors.primary}/>
     
     <AutenticacaoProvider>
       <UserInfoContextProvider>
