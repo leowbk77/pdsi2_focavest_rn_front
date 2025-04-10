@@ -1,10 +1,10 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View} from "react-native";
 import { Image } from 'expo-image';
 import { PropsWithChildren } from "react";
 import { Link } from 'expo-router';
 
 type Props = PropsWithChildren<{
-    iconhref: string,
+    iconhref: any,
     style?: any,
     top?: number | undefined,
 }>;

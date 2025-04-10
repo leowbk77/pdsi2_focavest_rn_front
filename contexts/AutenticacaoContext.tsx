@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import { saveToken, getToken, deleteToken } from "@/services/storage";
 import api from "@/services/api";
 
 interface AutenticacaoContextType {
@@ -6,6 +7,9 @@ interface AutenticacaoContextType {
     isAuthenticated: boolean;
     login: (email: string, pw: string) => Promise<void>;
     logout: () => void;
+
+    loginFromJson: () => Promise<void>;
+    logoutJson: () => void;
 };
 
 interface AuthProviderProps {
@@ -33,10 +37,27 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
         setIsAuth(false);
     };
 
+    const loginFromJson = async () => {
+        try {
+            const json = require('@/assets/temp/json/auth.json');
+            setToken(json.token);
+            // api.defaults.headers.common['Authorization'] = `Bearer ${receivedToken}`;
+            await saveToken(json.token);
+        } catch (error) {
+            console.log("cannot login: ", error);
+        }
+    };
+    const logoutJson = async () => {
+        setToken(null);
+        await deleteToken();
+        // delete api.defaults.headers.common['Authorization'];
+    };
+
     return(
         <AutenticacaoContext.Provider value={{
             token, isAuthenticated,
-            login, logout
+            login, logout,
+            loginFromJson, logoutJson,
         }}>
             {children}
         </AutenticacaoContext.Provider>

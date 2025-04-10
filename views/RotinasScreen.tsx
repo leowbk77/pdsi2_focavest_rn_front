@@ -23,9 +23,6 @@ const RotinasScreen = () => {
                 <RotinaBox></RotinaBox>
             </View>
             
-            <View style={styles.temp}>
-                <InputBox title={'Input'} bkgColor="white"></InputBox>
-            </View>
 
         </View>
     );
@@ -57,9 +54,6 @@ const styles = StyleSheet.create({
     icon: {
         alignSelf: 'center',
     },
-    temp: {
-        height: '20%'
-    }
 });
 
 export default RotinasScreen;

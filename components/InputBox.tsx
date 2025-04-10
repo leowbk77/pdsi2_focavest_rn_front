@@ -1,17 +1,24 @@
-import { StyleSheet, View, Text, TextInput } from "react-native";
+import { StyleSheet, View, Text, TextInput, InputModeOptions } from "react-native";
 import { colors } from "@/styles/color";
 
 interface Props {
     bkgColor: string,
     isSecure?: boolean,
     title: string,
+    placeholder?: string,
+    inputmode?: InputModeOptions | undefined,
 };
 
-const InputBox = ({bkgColor, isSecure, title}: Props) => {
+const InputBox = ({bkgColor, isSecure, title, placeholder, inputmode}: Props) => {
     return(
         <View style={styles.main}>
             <Text style={[styles.txt, {backgroundColor: bkgColor}]}>{title}</Text>
-            <TextInput style={styles.txtInput}/>
+            <TextInput 
+                style={styles.txtInput} 
+                placeholder={placeholder} 
+                inputMode={inputmode}
+                secureTextEntry={isSecure} 
+                placeholderTextColor={colors.placeholderText}/>
         </View>
     );
 };

@@ -4,7 +4,9 @@ import { useAuth } from "@/contexts/AutenticacaoContext";
 import { Link, router } from "expo-router";
 import { Image } from 'expo-image';
 import { colors } from "@/styles/color";
+
 import MainButton from "@/components/MainButton";
+import InputBox from "@/components/InputBox";
 
 const Login = () => {
     const {login} = useAuth();
@@ -17,48 +19,51 @@ const Login = () => {
     };
 
     return (
+
         <ImageBackground
         source={require('@/assets/images/focavestbkg.jpg')}
         style={styles.backgroundImg}
         resizeMode='cover'>
-          
-            <View style={styles.headerImg}>
-              <Image style={styles.imgsize} source={require('@/assets/images/FocaVestWLogo.png')} contentFit='fill'/>
-            </View>
+
+          <ScrollView contentContainerStyle={styles.container}>
+
+            <Image style={styles.headerImg} source={require('@/assets/images/FocaVestWLogo.png')} contentFit='contain'/>
 
             <View style={styles.loginContainer}>
-              
-              <View style={styles.titleView}>
-                <Text style={styles.headerTitleTxt}>Login</Text>
-                <Text style={styles.headerTxt}>Não tem uma conta? <Link href="/sign-up" style={styles.link}> Registre-se</Link> </Text>
-              </View>
-              
-              <View style={styles.inputsView}>
-                <View>
-                  <Text>Email</Text>
-                  <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email" onChangeText={setEmail} placeholderTextColor={colors.placeholderText} />
+                
+                <View style={styles.titleView}>
+                  <Text style={styles.headerTitleTxt}>Login</Text>
+                  <Text style={styles.headerTxt}>Não tem uma conta? <Link href="/sign-up" style={styles.link}> Registre-se</Link> </Text>
                 </View>
-                <View>
-                  <Text>Password</Text>
-                  {/* https://www.geeksforgeeks.org/how-to-show-and-hide-password-in-react-native/ */}
-                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} onChangeText={setPw} placeholderTextColor={colors.placeholderText} />
+                
+                <View style={styles.inputsView}>
+                  <View>
+                    <InputBox title={"Email"} bkgColor={colors.secondary} inputmode="email"/>
+                    {/* {<Text>Email</Text>
+                    <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email" onChangeText={setEmail} placeholderTextColor={colors.placeholderText} />} */}
+                  </View>
+                  
+                  <View>
+                    <InputBox title={"Senha"} bkgColor={colors.secondary} isSecure={true}/>
+                    {/*<Text>Password</Text>
+                    {/* https://www.geeksforgeeks.org/how-to-show-and-hide-password-in-react-native/ }
+                    <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} onChangeText={setPw} placeholderTextColor={colors.placeholderText} />*/}
+                  </View>
                 </View>
-              </View>
 
-              <View style={styles.pwOptionsView}>
-                <Text>[ ] Lembrar-me</Text>
-                {/*https://github.com/WrathChaos/react-native-bouncy-checkbox*/}
-                <Link href="/sign-up" style={styles.link}> Esqueceu a senha?</Link>
-              </View>
+                <View style={styles.pwOptionsView}>
+                  <Text>[ ] Lembrar-me</Text>
+                  {/*https://github.com/WrathChaos/react-native-bouncy-checkbox*/}
+                  <Link href="/sign-up" style={styles.link}> Esqueceu a senha?</Link>
+                </View>
 
-              <Button title="Entrar" onPress={() => router.push("/(main)/home")} color={colors.primary} />
-
-              <View style={{marginTop: 10}}>
-                <MainButton title="Entrar" onPress={loginApp} disable={false}/>
-              </View>
-              
+                <View style={styles.btnView}>
+                  <Button title="Entrar" onPress={() => router.push("/(main)/home")} color={colors.primary} />
+                  {/* {<MainButton title="Entrar" onPress={loginApp} disable={false}/>} */}
+                </View>
 
             </View>
+          </ScrollView>
 
         </ImageBackground>
     );
@@ -67,27 +72,47 @@ const Login = () => {
 const styles = StyleSheet.create({
   backgroundImg: {
     flex: 1,
-    alignItems: 'center',
+    paddingLeft: '5%',
+    paddingRight: '5%',
   },
-  titleView: {
-    alignItems: 'center',
-    padding: '10%',
+  container: {
+    flexGrow: 1,
   },
-  inputsView: {
+  
 
-  },
-  headerTitleTxt: {
-    color: colors.headerText,
-    fontWeight: 'bold',
-    fontSize: 30
+  headerImg: {
+    width: 100,
+    height: 100,
+    margin: '5%',
+    alignSelf: 'center'
   },
   loginContainer: {
       backgroundColor: colors.secondary,
       borderRadius: 20,
       padding: '5%',
   },
-  txt: {
-      color: 'grey'
+
+
+  titleView: {
+    alignItems: 'center',
+    padding: '10%',
+  },
+  inputsView: {
+    marginBottom: '5%'
+  },
+  pwOptionsView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: '10%',
+  },
+  btnView: {
+  },
+
+
+  headerTitleTxt: {
+    color: colors.headerText,
+    fontWeight: 'bold',
+    fontSize: 30
   },
   headerTxt: {
       color: 'grey',
@@ -95,29 +120,6 @@ const styles = StyleSheet.create({
   },
   link: {
       color: colors.primary,
-  },
-  input: {
-      color: colors.text,
-      height: 50,
-      marginBottom: '5%',
-      borderRadius: 10,
-      borderWidth: 2,
-      borderColor: 'rgba(26 28 30 / .2)',
-  },
-  pwOptionsView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: '5%',
-  },
-  headerImg: {
-    width: '25%',
-    height: '10%',
-    marginTop: '10%',
-    marginBottom: '10%'
-  },
-  imgsize: {
-    width: '100%',
-    height: '100%',
   },
 });
 

@@ -1,5 +1,4 @@
 import Login from '@/views/Login';
-import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 /* links
@@ -11,16 +10,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const LoginScreen = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{flex: 1}}>
       <Login />
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  }
-});
 
 export default LoginScreen;
