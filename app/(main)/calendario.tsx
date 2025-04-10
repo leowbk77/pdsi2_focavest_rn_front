@@ -4,14 +4,8 @@ import CalendarioScreen from '@/views/CalendarioScreen';
 
 export default function Calendario() {
   return(
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{flex: 1}}>
       <CalendarioScreen />
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

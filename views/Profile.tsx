@@ -1,11 +1,12 @@
+import { useEffect } from 'react';
 import {StyleSheet, Text, View,} from 'react-native';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Image } from 'expo-image';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { colors } from '@/styles/color';
 
 import { useUserInfo } from '@/contexts/userInfoContext';
-import { useEffect } from 'react';
-import { Link } from 'expo-router';
+
+import Header from '@/components/Header';
 
 import {Platform, StatusBar } from 'react-native';
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
@@ -28,13 +29,9 @@ const Profile = () => {
     return (
         <View style={styles.mainView}>
 
-            <View style={styles.header}>
-                <Image style={styles.imgsize} source={require('@/assets/images/FocaVestPLogo.png')} contentFit='contain'/>
-                <Link href={'/config'}>
-                    <FontAwesome name="gear" size={24} color={colors.primary} style={styles.icon}/>
-                </Link>
-                
-            </View>
+            <Header top={top} iconhref='/config'>
+                <FontAwesome name="gear" size={24} color={colors.primary} style={styles.icon}/>
+            </Header>
 
             <View style={styles.userInfoView}>
                 <Image source="https://cataas.com/cat" style={styles.imgPfp}/>

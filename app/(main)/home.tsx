@@ -3,6 +3,8 @@ import { SafeAreaView } from 'react-native';
 
 export default function Home() {
   return (
-      <HomeScreen />
+      <SafeAreaView style={{flex: 1}}>
+        <HomeScreen />
+      </SafeAreaView>
   );
 }

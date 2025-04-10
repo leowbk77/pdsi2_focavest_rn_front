@@ -1,22 +1,20 @@
 import { Text, View,StyleSheet,  } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Image } from 'expo-image';
 import { colors } from '@/styles/color';
-import ModularBox from '@/components/ModularBox';
 
-//teste - correcao do overlap da barra de status no android
+import ModularBox from '@/components/ModularBox';
+import Header from '@/components/Header';
+
 import {Platform, StatusBar } from 'react-native';
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
-//teste
 
 const HomeScreen = () => {
     return (
         <View style={styles.mainView}>
-          
-            <View style={styles.header}>
-                <Image style={styles.imgsize} source={require('@/assets/images/FocaVestPLogo.png')} contentFit='contain'/>
-                <FontAwesome name="gear" size={24} color={colors.primary} style={styles.icon}/>
-            </View>
+            
+            <Header top={top} iconhref='/config'>
+              <FontAwesome name="gear" size={24} color={colors.primary} style={styles.icon}/>
+            </Header>
 
             <View style={styles.welcome}>
               <Text>Bem Vindo(a)</Text>

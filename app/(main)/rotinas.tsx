@@ -1,7 +1,10 @@
 import RotinasScreen from "@/views/RotinasScreen";
+import { SafeAreaView } from 'react-native';
 
 export default function Rotinas() {
     return (
-        <RotinasScreen />
+        <SafeAreaView style={{flex:1}}>
+            <RotinasScreen />
+        </SafeAreaView>
     );
 };

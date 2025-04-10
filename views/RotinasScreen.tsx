@@ -1,11 +1,10 @@
 import { View, Text, StyleSheet, Button } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Image } from 'expo-image';
 import { colors } from '@/styles/color';
 
 import RotinaBox from "@/components/RotinaBox";
-import MainButton from "@/components/MainButton";
 import InputBox from "@/components/InputBox";
+import Header from '@/components/Header';
 
 import {Platform, StatusBar } from 'react-native';
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
@@ -14,10 +13,9 @@ const RotinasScreen = () => {
     return(
         <View style={styles.mainView}>
 
-            <View style={styles.header}>
-                <Image style={styles.imgsize} source={require('@/assets/images/FocaVestPLogo.png')} contentFit='contain'/>
+            <Header top={top} iconhref='/config'>
                 <FontAwesome5 name="plus" size={24} color={colors.primary} style={styles.icon}/>
-            </View>
+            </Header>
 
             <Text style={styles.h1}>ROTINAS</Text>
 
