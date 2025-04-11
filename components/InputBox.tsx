@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TextInput, InputModeOptions } from "react-native";
+import { StyleSheet, View, Text, TextInput, InputModeOptions, KeyboardTypeOptions } from "react-native";
 import { colors } from "@/styles/color";
 
 interface Props {
@@ -7,9 +7,11 @@ interface Props {
     title: string,
     placeholder?: string,
     inputmode?: InputModeOptions | undefined,
+    keyboardtype?: KeyboardTypeOptions,
+    onChangeText?: (txt: string) => void;
 };
 
-const InputBox = ({bkgColor, isSecure, title, placeholder, inputmode}: Props) => {
+const InputBox = ({bkgColor, isSecure, title, placeholder, inputmode, onChangeText, keyboardtype}: Props) => {
     return(
         <View style={styles.main}>
             <Text style={[styles.txt, {backgroundColor: bkgColor}]}>{title}</Text>
@@ -18,7 +20,9 @@ const InputBox = ({bkgColor, isSecure, title, placeholder, inputmode}: Props) =>
                 placeholder={placeholder} 
                 inputMode={inputmode}
                 secureTextEntry={isSecure} 
-                placeholderTextColor={colors.placeholderText}/>
+                placeholderTextColor={colors.placeholderText}
+                onChangeText={onChangeText}
+                keyboardType={keyboardtype}/>
         </View>
     );
 };

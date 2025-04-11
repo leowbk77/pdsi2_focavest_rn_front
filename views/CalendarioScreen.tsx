@@ -49,7 +49,7 @@ const CalendarioScreen = () => {
               <View style={styles.calendarView}>
                 <CalendarProvider date={INITIAL_DATE}>
                   <ExpandableCalendar onDayPress={day => setSelected(day.dateString)} theme={calendarCustomTheme}/>
-                  <TimelineList  events={eventsTlList} showNowIndicator={true} scrollToFirst={true}/>
+                  <TimelineList events={eventsTlList} showNowIndicator={true} scrollToFirst={true}/>
                 </CalendarProvider>
               </View>
     );
@@ -58,8 +58,12 @@ const CalendarioScreen = () => {
 const styles = StyleSheet.create({
     calendarView: {
       flex: 1,
-    }
+    },
   });
+
+const TimelineListTheme = {
+  padding: '20%',
+};
 
 const calendarCustomTheme = {
     arrowColor: colors.primary,

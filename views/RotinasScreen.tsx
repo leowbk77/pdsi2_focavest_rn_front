@@ -3,7 +3,6 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { colors } from '@/styles/color';
 
 import RotinaBox from "@/components/RotinaBox";
-import InputBox from "@/components/InputBox";
 import Header from '@/components/Header';
 
 import {Platform, StatusBar } from 'react-native';
@@ -19,7 +18,9 @@ const RotinasScreen = () => {
 
             <Text style={styles.h1}>ROTINAS</Text>
 
-            <View>
+            <View style={{flex: 1}}>
+                <RotinaBox></RotinaBox>
+                <RotinaBox></RotinaBox>
                 <RotinaBox></RotinaBox>
             </View>
             

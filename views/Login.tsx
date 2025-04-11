@@ -38,16 +38,11 @@ const Login = () => {
                 
                 <View style={styles.inputsView}>
                   <View>
-                    <InputBox title={"Email"} bkgColor={colors.secondary} inputmode="email"/>
-                    {/* {<Text>Email</Text>
-                    <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email" onChangeText={setEmail} placeholderTextColor={colors.placeholderText} />} */}
+                    <InputBox title={"Email"} bkgColor={colors.secondary} inputmode="email" keyboardtype="email-address" onChangeText={text => {setEmail(text)}}/>
                   </View>
                   
                   <View>
-                    <InputBox title={"Senha"} bkgColor={colors.secondary} isSecure={true}/>
-                    {/*<Text>Password</Text>
-                    {/* https://www.geeksforgeeks.org/how-to-show-and-hide-password-in-react-native/ }
-                    <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} onChangeText={setPw} placeholderTextColor={colors.placeholderText} />*/}
+                    <InputBox title={"Senha"} bkgColor={colors.secondary} isSecure={true} onChangeText={text => {setPw(text)}}/>
                   </View>
                 </View>
 
@@ -58,8 +53,7 @@ const Login = () => {
                 </View>
 
                 <View style={styles.btnView}>
-                  <Button title="Entrar" onPress={() => router.push("/(main)/home")} color={colors.primary} />
-                  {/* {<MainButton title="Entrar" onPress={loginApp} disable={false}/>} */}
+                  <MainButton title="Entrar" onPress={() => router.push("/(main)/home")} disable={false}/>
                 </View>
 
             </View>

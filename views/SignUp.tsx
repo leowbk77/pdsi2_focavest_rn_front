@@ -1,62 +1,82 @@
-import { StyleSheet, ImageBackground, Text, View, TextInput, Button} from "react-native";
+import { StyleSheet, ImageBackground, Text, View, ScrollView} from "react-native";
 import { Link, router } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Image } from 'expo-image';
 import { colors } from "@/styles/color";
 
+import MainButton from "@/components/MainButton";
+import InputBox from "@/components/InputBox";
+import { useState } from "react";
+
 const SignUp = () => {
-    return (
-        <ImageBackground
-        source={require('@/assets/images/focavestbkg.jpg')}
-        style={styles.backgroundImg}
-        resizeMode='cover'>
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
 
-            <View style={styles.container}>
-              
-              <View>
-                <Link href="/login"> 
-                  <AntDesign name="arrowleft" size={24} color="black" /> 
-                </Link>
-              </View>
+  const createJson = () => {
+    const newUser = {};
+    newUser.token = "";
+    newUser.user = {};
+    newUser.user.nome = nome;
+    newUser.user.email = email;
+    newUser.user.pw = pw;
+    console.log(newUser);
+  };
 
-              <View style={styles.titleView} >
-                <Text style={styles.titleText}>Inscrever-se</Text>
-                <Text>Já tem uma conta? <Link href="/login" style={styles.link}> Login</Link> </Text>
-              </View>
+  return (
+    <ImageBackground
+    source={require('@/assets/images/focavestbkg.jpg')}
+    style={styles.backgroundImg}
+    resizeMode='cover'>
 
-              <View>
-                <View>
-                  <Text>Nome</Text>
-                  <TextInput style={styles.input} placeholder="" placeholderTextColor={colors.placeholderText}></TextInput>
-                </View>
-                <View>
-                  <Text>E-mail</Text>
-                  <TextInput style={styles.input} placeholder=" email@email.com" inputMode="email" placeholderTextColor={colors.placeholderText}></TextInput>
-                </View>
-                <View>
-                  <Text>Senha</Text>
-                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} placeholderTextColor={colors.placeholderText}></TextInput>
-                </View>
-                <View>
-                  <Text>Repita a senha</Text>
-                  <TextInput style={styles.input} placeholder=" Password" secureTextEntry={true} placeholderTextColor={colors.placeholderText}></TextInput>
-                </View>
-              </View>
+        <ScrollView contentContainerStyle={styles.container}>
+          
+          <View>
+            <Link href="/login"> 
+              <AntDesign name="arrowleft" size={24} color="black" /> 
+            </Link>
+          </View>
 
-              <Button title='Registrar' onPress={() => router.push("/login")} color={colors.primary} />
+          <View style={styles.titleView} >
+            <Text style={styles.titleText}>Inscrever-se</Text>
+            <Text>Já tem uma conta? <Link href="/login" style={styles.link}> Login</Link> </Text>
+          </View>
 
+          <View>
+
+            <View style={styles.input}>
+              <InputBox title={"Nome"} bkgColor={colors.secondary} onChangeText={text => {setNome(text)}}/>
             </View>
 
-        </ImageBackground>
-    );
+            <View style={styles.input}>
+              <InputBox title={"E-mail"} bkgColor={colors.secondary} inputmode="email" keyboardtype="email-address" onChangeText={text => {setEmail(text)}}/>
+            </View>
+
+            <View style={styles.input}>
+              <InputBox title={"Senha"} bkgColor={colors.secondary} isSecure={true}/>
+            </View>
+
+            <View style={styles.input}>
+              <InputBox title={"Repita a senha"} bkgColor={colors.secondary} isSecure={true} onChangeText={text => {setPw(text)}}/>
+            </View>
+
+          </View>
+
+          <View style={styles.input}>
+            <MainButton title="Registrar" onPress={createJson} disable={false}/>
+          </View>
+
+        </ScrollView>
+
+    </ImageBackground>
+  );
 };
 
 const styles = StyleSheet.create({
     backgroundImg: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: '5%'
+      paddingLeft: '5%',
+      paddingRight: '5%',
+      paddingTop: '25%',
     },
     titleView: {
       paddingBottom: '10%',
@@ -73,16 +93,12 @@ const styles = StyleSheet.create({
       width: '100%',
     },
     link: {
-        color: colors.primary
+      color: colors.primary
     },
     input: {
-        color: colors.text,
-        height: 50,
-        marginBottom: '5%',
-        borderRadius: 10,
-        borderWidth: 2,
-        borderColor: 'rgba(26 28 30 / .2)',
+      marginBottom: '5%',
     },
+
   });
 
 export default SignUp;
