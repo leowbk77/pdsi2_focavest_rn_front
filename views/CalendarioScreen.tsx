@@ -2,15 +2,13 @@ import { View, StyleSheet, } from 'react-native';
 import {Calendar, LocaleConfig, ExpandableCalendar, TimelineEventProps, TimelineList, CalendarProvider, TimelineProps, CalendarUtils} from 'react-native-calendars';
 import { useState } from 'react';
 import { colors } from '@/styles/color';
+import { useTaskInfo } from '@/contexts/TaskContext';
 
 /*
 ==========================calendario===========================
 https://wix.github.io/react-native-calendars/docs/Intro
 ===============================================================
 */
-
-const eventsTlList = {'2025-03-31': [{start: '2025-03-31 09:20:00', end: '2025-03-31 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-                                      {start: '2025-03-31 20:00:00', end: '2025-03-31 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]}; // mockup
                                       
 LocaleConfig.locales['ptBR'] = {
     monthNames: [
@@ -38,6 +36,7 @@ const INITIAL_DATE =  CalendarUtils.getCalendarDateString(Date());
 
 const CalendarioScreen = () => {
     const [selected, setSelected] = useState('');
+    const {tasks} = useTaskInfo();
 
     const getDate = () => {
         const date = CalendarUtils.getCalendarDateString(Date())
@@ -49,7 +48,7 @@ const CalendarioScreen = () => {
               <View style={styles.calendarView}>
                 <CalendarProvider date={INITIAL_DATE}>
                   <ExpandableCalendar onDayPress={day => setSelected(day.dateString)} theme={calendarCustomTheme}/>
-                  <TimelineList events={eventsTlList} showNowIndicator={true} scrollToFirst={true}/>
+                  <TimelineList events={tasks} showNowIndicator={true} scrollToFirst={true}/>
                 </CalendarProvider>
               </View>
     );

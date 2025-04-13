@@ -5,10 +5,14 @@ import { colors } from '@/styles/color';
 import RotinaBox from "@/components/RotinaBox";
 import Header from '@/components/Header';
 
+import { useTaskInfo } from '@/contexts/TaskContext';
+
 import {Platform, StatusBar } from 'react-native';
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
 const RotinasScreen = () => {
+    const {tasks} = useTaskInfo();
+
     return(
         <View style={styles.mainView}>
 
