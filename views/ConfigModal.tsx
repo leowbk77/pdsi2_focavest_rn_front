@@ -1,5 +1,6 @@
 import { Link, router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
+import { colors } from "@/styles/color";
 
 /*
     Modal ok no android -> necessita teste no ios
@@ -43,13 +44,16 @@ const style = StyleSheet.create({
 
     top: {
         flex: 1,
+        backgroundColor: colors.modalBackground,
     },
     mid: {
         flex: 8,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        backgroundColor: colors.modalBackground,
     },
     bottom: {
         flex: 1,
+        backgroundColor: colors.modalBackground,
     },
 
 

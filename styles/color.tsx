@@ -4,5 +4,7 @@ export const colors = {
     secondary: '#FFFFFF',
     headerText: '#20132C',
     text: '#616E7D',
+    viewWBackground: 'white',
     placeholderText: 'rgba(26 28 30 / .2)',
+    modalBackground: 'rgba(0, 0, 0, 0.3)',
 };

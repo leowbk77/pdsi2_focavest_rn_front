@@ -32,6 +32,8 @@ const styles = StyleSheet.create({
   mainView: {
     flex: 1,
     padding: '5%',
+    paddingBottom: 0,
+    backgroundColor: colors.viewWBackground,
   },
   header: {
     flex: 1,

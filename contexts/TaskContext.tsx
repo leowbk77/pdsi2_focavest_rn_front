@@ -1,12 +1,21 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import api from "@/services/api";
 
+// mocks
 const eventsMockList = {
     '2025-04-13': [
         {start: '2025-04-13 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
-        {start: '2025-04-13 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}],
+        {start: '2025-04-13 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
 };
 
+const rotinaMock = {
+    'materia': 'Matematica',
+    'assunto': 'Trigonometria',
+    'eventos': eventsMockList,
+}
+//mocks
+
+//interfaces
 interface TaskContent {
     start: string;
     end: string;
@@ -20,8 +29,15 @@ interface TaskType {
     [date:string] : TaskContent[];
 };
 
+interface RotinaType {
+    materia: string,
+    assunto: string,
+    eventos?: TaskType,
+}
+
 interface TaskInfoContextType {
     tasks: TaskType;
+    dates: string[];
     addTask: (date: string, task: TaskContent) => void;
     removeTask: (date: string) => void;
 };
@@ -29,11 +45,13 @@ interface TaskInfoContextType {
 interface TaskInfoProviderProps {
     children: ReactNode;
 };
+//interfaces
 
 export const TaskContext = createContext<TaskInfoContextType | undefined>(undefined);
 
 export const TaskInfoContextProvider = ({children,}: TaskInfoProviderProps) => {
     const [tasks, setTasks] = useState<TaskType>(eventsMockList);
+    const dates = Object.keys(tasks);
 
     const addTask = async (date: string, task: TaskContent) => {
         setTasks((prev) => ({
@@ -52,8 +70,8 @@ export const TaskInfoContextProvider = ({children,}: TaskInfoProviderProps) => {
 
     return(
         <TaskContext.Provider value={{
-            tasks, addTask,
-            removeTask
+            tasks, dates,
+            addTask, removeTask
         }}>{children}
         </TaskContext.Provider>);
 };

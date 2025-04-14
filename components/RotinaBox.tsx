@@ -1,13 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
 import { colors } from "@/styles/color";
+import { PropsWithChildren } from "react";
 
-const RotinaBox = () => {
+type Props = PropsWithChildren<{
+    materia?: string
+}>;
+
+const RotinaBox = ({materia,}: Props) => {
     return (
         <View style={styles.main}>
             <View style={styles.leftView}></View>
             <View style={styles.rightView}>
                 <View>
-                    
+                    <Text>{materia}</Text>
                 </View>
                 <View></View>
             </View>
@@ -17,14 +22,14 @@ const RotinaBox = () => {
 
 const styles = StyleSheet.create({
     main: {
-        flex: 1,
         flexDirection: 'row',
         padding: '2%',
         boxShadow: '1 1 3 3 ' + colors.placeholderText,
         marginBottom: 10,
+        height: 120,
     },
     leftView: {
-        flex: .1,
+        flex: .2,
         borderRightWidth: 10,
         borderColor: colors.primary,
     },
