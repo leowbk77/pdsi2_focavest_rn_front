@@ -19,7 +19,7 @@ const RotinasScreen = () => {
     return(
         <View style={styles.mainView}>
 
-            <Header top={top} iconhref='/config'>
+            <Header top={top} iconhref='/add-rotina'>
                 <FontAwesome5 name="plus" size={24} color={colors.primary} style={styles.icon}/>
             </Header>
 
