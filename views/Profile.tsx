@@ -4,27 +4,18 @@ import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { colors } from '@/styles/color';
 
-import { useUserInfo } from '@/contexts/userInfoContext';
-
 import Header from '@/components/Header';
 
 import {Platform, StatusBar } from 'react-native';
+import { useAuth } from '@/contexts/AutenticacaoContext';
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
 const Profile = () => {
 
-    const {userName, userCursos, 
-            userAge, userCity, 
-            fetchUserData, fetchUserInfoFromJson,
+    const { userName, userCursos, 
+            userAge, userCity,
             data, pfp,
-            uni, curso, site,
-            fetchNextVestInfoFromJson} = useUserInfo();
-
-    useEffect(() => {
-        // fetchUserData('Lucas');
-        fetchUserInfoFromJson();
-        fetchNextVestInfoFromJson();
-    }, []);
+            uni, curso, site,} = useAuth();
 
     return (
         <View style={styles.mainView}>

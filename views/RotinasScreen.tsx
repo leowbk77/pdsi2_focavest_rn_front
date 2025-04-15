@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Button, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, Button, ScrollView, FlatList , SectionList} from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { colors } from '@/styles/color';
 
@@ -16,6 +16,12 @@ const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 const RotinasScreen = () => {
     const {tasks, dates} = useTaskInfo();
 
+    // Transforma as rotinas agrupadas por data em um array para SectionList
+    const sections = dates.map(date => ({
+        title: date,
+        data: tasks[date] || [],
+    }));
+
     return(
         <View style={styles.mainView}>
 
@@ -26,7 +32,21 @@ const RotinasScreen = () => {
             <Text style={styles.h1}>ROTINAS</Text>
 
             <View style={{flex:1}}>
-                <ScrollView style={{height: '100%'}} contentContainerStyle={styles.container}>
+                    <SectionList
+                sections={sections}
+                keyExtractor={(item, index) => `${item.materia}-${index}`}
+                contentContainerStyle={styles.container}
+                ListEmptyComponent={
+                    <Text style={styles.emptyText}>Nenhuma rotina encontrada.</Text>
+                }
+                renderItem={({ item }) => (
+                    <RotinaBox materia={item.materia} />
+                )}
+                renderSectionHeader={({ section: { title } }) => (
+                    <Text style={styles.dateTitle}>{title}</Text>
+                )}
+                />
+                {/* <ScrollView style={{height: '100%'}} contentContainerStyle={styles.container}>
                     {dates.map(date => (
                         tasks[date].map(item => (<RotinaBox materia={item.materia}/>))
                     ))}
@@ -36,7 +56,7 @@ const RotinasScreen = () => {
                     <RotinaBox materia={'teste'}></RotinaBox>
                     <RotinaBox materia={'teste'}></RotinaBox>
                     <RotinaBox materia={'teste'}></RotinaBox>
-                </ScrollView>
+                </ScrollView> */}
             </View>
         
         </View>
@@ -74,6 +94,21 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         padding: '2%',
     },
+
+
+    
+  dateTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.primary,
+    marginVertical: 8,
+    paddingLeft: 4,
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: 'gray',
+    marginTop: 20,
+  },
     
 });
 

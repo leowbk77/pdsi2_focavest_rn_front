@@ -6,6 +6,22 @@ const eventsMockList = {
     '2025-04-13': [
         {start: '2025-04-13 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
         {start: '2025-04-13 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
+    
+    '2025-04-14': [
+        {start: '2025-04-14 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
+        {start: '2025-04-14 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
+            
+    '2025-04-15': [
+        {start: '2025-04-15 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
+        {start: '2025-04-15 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
+        
+    '2025-04-16': [
+        {start: '2025-04-16 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
+        {start: '2025-04-16 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
+        
+    '2025-04-17': [
+        {start: '2025-04-17 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
+        {start: '2025-04-17 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
 };
 
 const rotinaMock = {

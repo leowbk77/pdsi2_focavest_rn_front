@@ -1,3 +1,8 @@
+/*
+  CONTEXT SERÁ ABANDONADO
+  INFOS TRANSFERIDAS PARA O CONTEXT DE AUTENTICACAO
+*/
+
 import { createContext, useContext, useState, ReactNode } from "react";
 import api from "@/services/api";
 
@@ -80,7 +85,8 @@ export const UserInfoContextProvider = ({children,}: UserInfoProviderProps) => {
     
     const fetchUserInfoFromJson = async () => {
       try {
-        const userInfoJson = require("@/assets/temp/json/usuario.json");
+        const userInfoJson = require("@/assets/temp/json/auth.json");
+
         setUserName(userInfoJson.nome);
         setUserAge(userInfoJson.idade);
         setUserCity(userInfoJson.cidade);

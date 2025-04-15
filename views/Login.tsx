@@ -1,5 +1,5 @@
 import { StyleSheet, ImageBackground, Text, View, Button, TextInput, ScrollView } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AutenticacaoContext";
 import { Link, router } from "expo-router";
 import { Image } from 'expo-image';
@@ -9,14 +9,23 @@ import MainButton from "@/components/MainButton";
 import InputBox from "@/components/InputBox";
 
 const Login = () => {
-    const {login} = useAuth();
+    const {loginFromJson, isAuthenticated} = useAuth();
     const [email, setEmail] = useState("");
     const [pw, setPw] = useState("");
 
     const loginApp = async () => {
-      await login(email, pw);
-      router.replace('/');
+      //login
+      await loginFromJson(email, pw);
+      //login
     };
+
+    useEffect(() => {
+      if(isAuthenticated) {
+        console.log('Autenticado: ',isAuthenticated);
+        console.log('============================================================');
+        router.replace('/');
+      }
+    }, [isAuthenticated]);
 
     return (
 
@@ -53,7 +62,7 @@ const Login = () => {
                 </View>
 
                 <View style={styles.btnView}>
-                  <MainButton title="Entrar" onPress={() => router.push("/(main)/home")} disable={false}/>
+                  <MainButton title="Entrar" onPress={() => loginApp()} disable={false}/>
                 </View>
 
             </View>
