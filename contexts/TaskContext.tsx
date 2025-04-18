@@ -1,92 +1,116 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import api from "@/services/api";
 
-// mocks
-const eventsMockList = {
-    '2025-04-13': [
-        {start: '2025-04-13 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
-        {start: '2025-04-13 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
-    
-    '2025-04-14': [
-        {start: '2025-04-14 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
-        {start: '2025-04-14 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
-            
-    '2025-04-15': [
-        {start: '2025-04-15 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
-        {start: '2025-04-15 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
-        
-    '2025-04-16': [
-        {start: '2025-04-16 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
-        {start: '2025-04-16 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
-        
-    '2025-04-17': [
-        {start: '2025-04-17 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', materia: 'matematica'}, 
-        {start: '2025-04-17 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', materia: 'física'}],
-};
-
-const rotinaMock = {
-    'materia': 'Matematica',
-    'assunto': 'Trigonometria',
-    'eventos': eventsMockList,
-}
-//mocks
+// mock
+const tasksMock : Task[] = [
+    {
+        id: "1",
+        materia: 'Matematica',
+        topico: 'Matematica 1',
+        tempototal: 22,
+        data: '2025-04-13',
+        tasks: [
+            {start: '2025-04-13 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+            {start: '2025-04-13 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+    },
+    {
+        id: "2",
+        materia: 'Física',
+        topico: 'Física 1',
+        tempototal: 14,
+        data: '2025-04-14',
+        tasks: [
+            {start: '2025-04-14 09:20:00', end: '2025-04-14 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+            {start: '2025-04-14 20:00:00', end: '2025-04-14 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+    },
+    {
+        id: "3",
+        materia: 'Matematica',
+        topico: 'Matematica 1',
+        tempototal: 10,
+        data: '2025-04-15',
+        tasks: [
+            {start: '2025-04-15 09:20:00', end: '2025-04-15 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+            {start: '2025-04-15 20:00:00', end: '2025-04-15 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+    },
+    {
+        id: "4",
+        materia: 'Matematica',
+        topico: 'Matematica 1',
+        tempototal: 8,
+        data: '2025-04-16',
+        tasks: [
+            {start: '2025-04-16 09:20:00', end: '2025-04-16 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+            {start: '2025-04-16 20:00:00', end: '2025-04-16 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+    },
+    {
+        id: "5",
+        materia: 'Física',
+        topico: 'Física 1',
+        tempototal: 7,
+        data: '2025-04-17',
+        tasks: [
+            {start: '2025-04-17 09:20:00', end: '2025-04-17 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+            {start: '2025-04-17 20:00:00', end: '2025-04-17 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+    },
+    {
+        id: "6",
+        materia: 'Física',
+        topico: 'Física 2',
+        tempototal: 8,
+        data: '2025-04-17',
+        tasks: [
+            {start: '2025-04-17 09:20:00', end: '2025-04-17 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+            {start: '2025-04-17 20:00:00', end: '2025-04-17 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+    }
+];
+// \mock
 
 //interfaces
-interface TaskContent {
+interface TaskInfoProviderProps {
+    children: ReactNode;
+};
+
+interface TaskContent2 {
     start: string;
     end: string;
     title: string;
     summary?: string;
     color?: string;
-    materia?: string;
 };
 
-interface TaskType {
-    [date:string] : TaskContent[];
+interface Task {
+    id: string,
+    materia: string, // number ? identificar as materias por enum
+    topico: string,
+    tempototal: number,
+    data: string,
+    tasks: TaskContent2[],
 };
 
-interface RotinaType {
-    materia: string,
-    assunto: string,
-    eventos?: TaskType,
-}
-
-interface TaskInfoContextType {
-    tasks: TaskType;
-    dates: string[];
-    addTask: (date: string, task: TaskContent) => void;
+interface TaskInfoContext {
+    tasks: Task[];
+    addTask: (task: Task) => void;
     removeTask: (date: string) => void;
-};
+}
+// \interfaces
 
-interface TaskInfoProviderProps {
-    children: ReactNode;
-};
-//interfaces
-
-export const TaskContext = createContext<TaskInfoContextType | undefined>(undefined);
+export const TaskContext = createContext<TaskInfoContext | undefined>(undefined);
 
 export const TaskInfoContextProvider = ({children,}: TaskInfoProviderProps) => {
-    const [tasks, setTasks] = useState<TaskType>(eventsMockList);
-    const dates = Object.keys(tasks);
+    const [tasks, setTasks] = useState<Task[]>(tasksMock);
 
-    const addTask = async (date: string, task: TaskContent) => {
-        setTasks((prev) => ({
-            ...prev,
-            [date]: prev[date] ? [...prev[date], task] : [task],
-        }));
+    const addTask = async (task: Task) => {
+        setTasks(prev => [...prev, task]);
     };
 
-    const removeTask = async (date: string) => {
-        setTasks((prev) => {
-            const update = {...prev};
-            delete update[date];
-            return update;
-        });
+    const removeTask = async (id: string) => {
+        setTasks((prev) => prev.filter((t) => t.id !== id));
     };
 
     return(
         <TaskContext.Provider value={{
-            tasks, dates,
+            tasks,
             addTask, removeTask
         }}>{children}
         </TaskContext.Provider>);

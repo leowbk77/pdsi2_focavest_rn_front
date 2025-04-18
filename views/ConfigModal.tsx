@@ -2,10 +2,6 @@ import { Link, router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { colors } from "@/styles/color";
 
-/*
-    Modal ok no android -> necessita teste no ios
-*/
-
 const ConfigModal = () => {
     const isPresented = router.canGoBack();
 

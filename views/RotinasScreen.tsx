@@ -14,12 +14,12 @@ import { useEffect } from "react";
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
 const RotinasScreen = () => {
-    const {tasks, dates} = useTaskInfo();
+    const {tasks} = useTaskInfo();
 
-    // Transforma as rotinas agrupadas por data em um array para SectionList
-    const sections = dates.map(date => ({
-        title: date,
-        data: tasks[date] || [],
+    const uniqueDates = [...new Set(tasks.map(task => task.data))];
+    const sections = uniqueDates.map(date => ({
+      title: date,
+      data: tasks.filter(t => t.data === date),
     }));
 
     return(
@@ -32,31 +32,19 @@ const RotinasScreen = () => {
             <Text style={styles.h1}>ROTINAS</Text>
 
             <View style={{flex:1}}>
-                    <SectionList
+                <SectionList
                 sections={sections}
-                keyExtractor={(item, index) => `${item.materia}-${index}`}
+                keyExtractor={(item) => item.id}
                 contentContainerStyle={styles.container}
                 ListEmptyComponent={
                     <Text style={styles.emptyText}>Nenhuma rotina encontrada.</Text>
                 }
                 renderItem={({ item }) => (
-                    <RotinaBox materia={item.materia} submateria="trigonometria" icon="math"/>
+                    <RotinaBox materia={item.materia} submateria={item.topico} tempo={item.tempototal} icon="math"/>
                 )}
                 renderSectionHeader={({ section: { title } }) => (
                     <Text style={styles.dateTitle}>{title}</Text>
-                )}
-                />
-                {/* <ScrollView style={{height: '100%'}} contentContainerStyle={styles.container}>
-                    {dates.map(date => (
-                        tasks[date].map(item => (<RotinaBox materia={item.materia}/>))
-                    ))}
-
-                    <RotinaBox materia={'teste'}></RotinaBox>
-                    <RotinaBox materia={'teste'}></RotinaBox>
-                    <RotinaBox materia={'teste'}></RotinaBox>
-                    <RotinaBox materia={'teste'}></RotinaBox>
-                    <RotinaBox materia={'teste'}></RotinaBox>
-                </ScrollView> */}
+                )}/>
             </View>
         
         </View>
@@ -92,7 +80,7 @@ const styles = StyleSheet.create({
 
     container: {
         flexGrow: 1,
-        padding: '2%',
+        padding: '1%',
     },
 
 

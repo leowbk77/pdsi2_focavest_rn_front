@@ -37,6 +37,7 @@ const INITIAL_DATE =  CalendarUtils.getCalendarDateString(Date());
 const CalendarioScreen = () => {
     const [selected, setSelected] = useState('');
     const {tasks} = useTaskInfo();
+    const events = Object.fromEntries(tasks.map(task => ([task.data, task.tasks])));
 
     const getDate = () => {
         const date = CalendarUtils.getCalendarDateString(Date())
@@ -50,7 +51,7 @@ const CalendarioScreen = () => {
                   <ExpandableCalendar onDayPress={day => setSelected(day.dateString)} theme={calendarCustomTheme}/>
 
                     <View style={styles.timelineView}>
-                      <TimelineList events={tasks} showNowIndicator={true} scrollToFirst={true}/>
+                      <TimelineList events={events} showNowIndicator={true} scrollToFirst={true}/>
                     </View>
                   
                 </CalendarProvider>

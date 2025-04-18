@@ -1,8 +1,9 @@
-import { StyleSheet, ImageBackground, Text, View, Button, TextInput, ScrollView } from "react-native";
+import { StyleSheet, ImageBackground, Text, View, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AutenticacaoContext";
 import { Link, router } from "expo-router";
 import { Image } from 'expo-image';
+import Checkbox from "expo-checkbox";
 import { colors } from "@/styles/color";
 
 import MainButton from "@/components/MainButton";
@@ -12,6 +13,7 @@ const Login = () => {
     const {loginFromJson, isAuthenticated} = useAuth();
     const [email, setEmail] = useState("");
     const [pw, setPw] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
 
     const loginApp = async () => {
       //login
@@ -56,8 +58,10 @@ const Login = () => {
                 </View>
 
                 <View style={styles.pwOptionsView}>
-                  <Text>[ ] Lembrar-me</Text>
-                  {/*https://github.com/WrathChaos/react-native-bouncy-checkbox*/}
+                  <View style={styles.pwRememberMeView}>
+                    <Checkbox color={colors.primary} value={rememberMe} onValueChange={setRememberMe}/>
+                    <Text style={styles.pwRememberMeTxt}>Lembrar-me</Text>
+                  </View>
                   <Link href="/sign-up" style={styles.link}> Esqueceu a senha?</Link>
                 </View>
 
@@ -108,6 +112,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: '10%',
   },
+  pwRememberMeView: {
+    flexDirection: 'row',
+  },
+  pwRememberMeTxt: {
+    paddingLeft: 5,
+  },
+
   btnView: {
   },
 

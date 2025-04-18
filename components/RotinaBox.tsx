@@ -9,12 +9,20 @@ type Props = PropsWithChildren<{
     materia?: string;
     submateria?: string;
     icon?: string;
+    tempo?: number;
 }>;
 
-const RotinaBox = ({materia, submateria, icon}: Props) => {
+
+
+const RotinaBox = ({materia, submateria, tempo, icon}: Props) => {
     const [isChecked, setChecked] = useState(false);
     const [boxId, setBoxId] = useState(0);
     const [modalVisible, setModal] = useState(false);
+
+    const butao = () => {
+        setChecked(!isChecked);
+        console.log(isChecked, boxId);
+    };
 
     return (
     <>
@@ -50,14 +58,14 @@ const RotinaBox = ({materia, submateria, icon}: Props) => {
                 </View>
 
                 <View style={styles.midBottomView}>
-                    <Text style={styles.txtDecorated}>Estudo total: </Text>
+                    <Text style={styles.txtDecorated}>Estudo total: </Text><Text>{tempo}</Text>
                 </View>
 
             </View>
 
             <View style={styles.rightView}>
 
-                <Checkbox value={isChecked} onValueChange={setChecked}/>
+                <Checkbox color={colors.primary} value={isChecked} onValueChange={butao}/>
                 <View style={{}}>
                     <Pressable
                     onPress={() => {setModal(true)}}>
@@ -109,6 +117,7 @@ const styles = StyleSheet.create({
 
     },
     midBottomView: {
+        flexDirection: 'row',
     },
 
     centerIcon: {
