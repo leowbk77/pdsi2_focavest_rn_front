@@ -4,19 +4,16 @@ import { PropsWithChildren, useState } from "react";
 import Checkbox from "expo-checkbox";
 import { Image } from "expo-image";
 import icons from "./LectureIcons";
+import { Task } from "@/contexts/TaskContext";
 
 type Props = PropsWithChildren<{
-    materia?: string;
-    submateria?: string;
     icon?: string;
-    tempo?: number;
+    task: Task;
 }>;
 
-
-
-const RotinaBox = ({materia, submateria, tempo, icon}: Props) => {
+const RotinaBox = ({icon, task}: Props) => {
     const [isChecked, setChecked] = useState(false);
-    const [boxId, setBoxId] = useState(0);
+    const [boxId, setBoxId] = useState(task.id);
     const [modalVisible, setModal] = useState(false);
 
     const butao = () => {
@@ -51,14 +48,14 @@ const RotinaBox = ({materia, submateria, tempo, icon}: Props) => {
                     </View>
 
                     <View style={styles.centerInfo}>
-                        <Text style={styles.txtDecorated}>{materia}</Text>
-                        <Text>{submateria}</Text>
+                        <Text style={styles.txtDecorated}>{task.materia}</Text>
+                        <Text>{task.topico}</Text>
                     </View>
 
                 </View>
 
                 <View style={styles.midBottomView}>
-                    <Text style={styles.txtDecorated}>Estudo total: </Text><Text>{tempo}</Text>
+                    <Text style={styles.txtDecorated}>Estudo total: </Text><Text>{task.tempototal}</Text>
                 </View>
 
             </View>

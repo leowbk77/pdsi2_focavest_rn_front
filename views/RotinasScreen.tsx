@@ -40,7 +40,7 @@ const RotinasScreen = () => {
                     <Text style={styles.emptyText}>Nenhuma rotina encontrada.</Text>
                 }
                 renderItem={({ item }) => (
-                    <RotinaBox materia={item.materia} submateria={item.topico} tempo={item.tempototal} icon="math"/>
+                    <RotinaBox task={item} icon="math"/>
                 )}
                 renderSectionHeader={({ section: { title } }) => (
                     <Text style={styles.dateTitle}>{title}</Text>

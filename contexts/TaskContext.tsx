@@ -67,11 +67,11 @@ const tasksMock : Task[] = [
 // \mock
 
 //interfaces
-interface TaskInfoProviderProps {
+interface TaskProviderProps {
     children: ReactNode;
 };
 
-interface TaskContent2 {
+export interface TaskContent {
     start: string;
     end: string;
     title: string;
@@ -79,25 +79,25 @@ interface TaskContent2 {
     color?: string;
 };
 
-interface Task {
+export interface Task {
     id: string,
     materia: string, // number ? identificar as materias por enum
     topico: string,
     tempototal: number,
     data: string,
-    tasks: TaskContent2[],
+    tasks: TaskContent[],
 };
 
-interface TaskInfoContext {
+interface TaskContext {
     tasks: Task[];
     addTask: (task: Task) => void;
     removeTask: (date: string) => void;
 }
 // \interfaces
 
-export const TaskContext = createContext<TaskInfoContext | undefined>(undefined);
+export const TaskContext = createContext<TaskContext | undefined>(undefined);
 
-export const TaskInfoContextProvider = ({children,}: TaskInfoProviderProps) => {
+export const TaskContextProvider = ({children,}: TaskProviderProps) => {
     const [tasks, setTasks] = useState<Task[]>(tasksMock);
 
     const addTask = async (task: Task) => {
