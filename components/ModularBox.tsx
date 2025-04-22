@@ -1,22 +1,15 @@
 import { View, StyleSheet, Pressable, Text } from "react-native";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-
 import { colors } from "@/styles/color";
+/*
+    COMPONENTE SERÁ ABANDONADO PARA DAR LUGAR AOS COMPONENTES DA
+    NOVA HOME.
+*/
 
 const ModularBox = () => {
     return (
         <View style={styles.mainBox}>
             <View style={styles.boxContent}></View>
             <View style={styles.boxButtons}>
-
-                <Pressable>
-                    <FontAwesome5 name="trash" size={20} color={colors.primary} />
-                </Pressable>
-                {/* BOTOES TEMPORARIOS */}
-                <Pressable>
-                    <FontAwesome5 name="plus" size={20} color={colors.primary} />
-                </Pressable>
-
             </View>
         </View>
     );

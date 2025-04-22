@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import api from "@/services/api";
+import { CalendarUtils } from "react-native-calendars";
 
 // mock
 const tasksMock : Task[] = [
@@ -28,20 +29,20 @@ const tasksMock : Task[] = [
         materia: 'Matematica',
         topico: 'Matematica 1',
         tempototal: 10,
-        data: '2025-04-15',
+        data: '2025-04-21',
         tasks: [
-            {start: '2025-04-15 09:20:00', end: '2025-04-15 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-            {start: '2025-04-15 20:00:00', end: '2025-04-15 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+            {start: '2025-04-21 09:20:00', end: '2025-04-21 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+            {start: '2025-04-21 20:00:00', end: '2025-04-21 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
     },
     {
         id: "4",
         materia: 'Matematica',
         topico: 'Matematica 1',
         tempototal: 8,
-        data: '2025-04-16',
+        data: '2025-04-21',
         tasks: [
-            {start: '2025-04-16 09:20:00', end: '2025-04-16 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-            {start: '2025-04-16 20:00:00', end: '2025-04-16 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+            {start: '2025-04-21 09:20:00', end: '2025-04-21 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+            {start: '2025-04-21 20:00:00', end: '2025-04-21 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
     },
     {
         id: "5",
@@ -92,6 +93,7 @@ interface TaskContext {
     tasks: Task[];
     addTask: (task: Task) => void;
     removeTask: (date: string) => void;
+    todayTasks: () => Task[];
 }
 // \interfaces
 
@@ -108,10 +110,16 @@ export const TaskContextProvider = ({children,}: TaskProviderProps) => {
         setTasks((prev) => prev.filter((t) => t.id !== id));
     };
 
+    const todayTasks = () => {
+        const today = CalendarUtils.getCalendarDateString(Date());
+        return tasks.filter((t) => t.data == today);
+    };
+
     return(
         <TaskContext.Provider value={{
             tasks,
-            addTask, removeTask
+            addTask, removeTask,
+            todayTasks
         }}>{children}
         </TaskContext.Provider>);
 };

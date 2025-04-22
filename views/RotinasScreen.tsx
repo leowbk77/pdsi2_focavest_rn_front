@@ -36,6 +36,7 @@ const RotinasScreen = () => {
                 sections={sections}
                 keyExtractor={(item) => item.id}
                 contentContainerStyle={styles.container}
+                showsVerticalScrollIndicator={false}
                 ListEmptyComponent={
                     <Text style={styles.emptyText}>Nenhuma rotina encontrada.</Text>
                 }

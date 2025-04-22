@@ -1,12 +1,10 @@
 import { Stack } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
-import { UserInfoContextProvider } from '@/contexts/userInfoContext';
 import { AutenticacaoProvider } from "@/contexts/AutenticacaoContext";
 import { TaskContextProvider } from "@/contexts/TaskContext";
 import { VestContextProvider } from "@/contexts/VestContext";
 
 import { colors } from "@/styles/color";
-
 
 // https://stackoverflow.com/questions/79180521/how-to-remove-ripple-effect-in-tab-navigator-react-native
 

@@ -1,6 +1,9 @@
 import { Link, router } from "expo-router";
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { colors } from "@/styles/color";
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+const materias = ['Linguagens e Literatura', 'História', 'Geografia', 'Filosofia', 'Sociologia', 'Química', 'Física', 'Biologia'];
 
 const AddRotinaModal = () => {
     const isPresented = router.canGoBack();
@@ -9,18 +12,25 @@ const AddRotinaModal = () => {
         <View style={style.main}>
 
             <View style={style.top} />
-
             <View style={style.mid}>
-
-                <View style={style.midT} />
+                <View style={style.midL} />
                 <View style={style.midM}>
-                    {isPresented && <Link href={'../'} style={style.return}>Return</Link>}
+
+                    <View style={style.content}>
+                        <View style={style.header}>
+                            <View></View>
+                            <Text style={style.headerTxt}>ADICIONAR TAREFAS</Text>
+                            {isPresented && <Link href={'../'}><Ionicons name="close" size={24} color={colors.primary} /></Link>}
+                        </View>
+                        <View>
+
+                        </View>
+
+                    </View>
                     
                 </View>
-                <View style={style.midB} />
-
+                <View style={style.midR} />
             </View>
-
             <View style={style.bottom} />
 
         </View>
@@ -39,7 +49,7 @@ const style = StyleSheet.create({
         backgroundColor: colors.modalBackground,
     },
     mid: {
-        flex: 8,
+        flex: 9,
         flexDirection: 'row',
         backgroundColor: colors.modalBackground,
     },
@@ -49,7 +59,7 @@ const style = StyleSheet.create({
     },
 
 
-    midT: {
+    midL: {
         flex: .5,
     },
     midM: {
@@ -57,13 +67,22 @@ const style = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 10,
     },
-    midB: {
+    midR: {
         flex: .5,
     },
 
 
-    return: {
-        fontSize: 30,
+    content: {
+        flex: 1,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: 20,
+    },
+    headerTxt: {
+        fontSize: 18,
+        fontWeight: 'bold',
     },
 });
 
