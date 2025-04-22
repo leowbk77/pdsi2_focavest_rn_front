@@ -8,4 +8,5 @@ export const colors = {
     placeholderText: 'rgba(26 28 30 / .2)',
     modalBackground: 'rgba(0, 0, 0, 0.3)',
     boxShadowDefault: '5 5 5 lightgrey',
+    borderLgrey: 'rgba(26 28 30 / .2)',
 };
