@@ -66,8 +66,13 @@ const Profile = () => {
             </View>
 
             <View style={styles.vestsView}>
-                <Text style={styles.h1}>Vestibulares selecionados</Text>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.h1}>Vestibulares</Text>
+                    <View style={styles.hr2}/>
+                </View>
+                
                 <Vests/>
+                
             </View>
 
             <View style={styles.logoutView}>
@@ -111,6 +116,12 @@ const styles = StyleSheet.create({
         width: 'auto',
         minWidth: '30%',
         alignSelf: 'stretch'
+    },
+    hr2: {
+        flex: 1,
+        borderBottomColor: colors.primary,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        marginLeft: 10,
     },
     h1: {
         color: colors.headerText,

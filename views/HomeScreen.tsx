@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
   
   weekDataView: {
     flex: 1,
-    backgroundColor: 'blue',
   },
 
 });

@@ -90,6 +90,7 @@ export interface Task {
 };
 
 interface TaskContext {
+    today: Date;
     tasks: Task[];
     addTask: (task: Task) => void;
     removeTask: (date: string) => void;
@@ -101,6 +102,7 @@ export const TaskContext = createContext<TaskContext | undefined>(undefined);
 
 export const TaskContextProvider = ({children,}: TaskProviderProps) => {
     const [tasks, setTasks] = useState<Task[]>(tasksMock);
+    const today = new Date();
 
     const addTask = async (task: Task) => {
         setTasks(prev => [...prev, task]);
@@ -117,6 +119,7 @@ export const TaskContextProvider = ({children,}: TaskProviderProps) => {
 
     return(
         <TaskContext.Provider value={{
+            today,
             tasks,
             addTask, removeTask,
             todayTasks
