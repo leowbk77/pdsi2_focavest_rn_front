@@ -3,16 +3,17 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { colors } from "@/styles/color";
 
 type Props = PropsWithChildren<{
+    size: number,
     title: string,
     onPress?: () => void,
     disable?: boolean,
 }>;
 
-const MainButton = ({title, children, onPress = () => {}, disable = false}: Props) => {
+const MainButton = ({title, onPress = () => {}, disable = false, size}: Props) => {
+    const colorBg = disable ? colors.buttonDisabled : colors.primary;
     return (
-    <Pressable style={styles.btn} onPress={onPress} disabled={disable}>
+    <Pressable style={[styles.btn , {backgroundColor: colorBg, height: size}]} onPress={onPress} disabled={disable} android_ripple={{radius: 5}}>
         <Text style={styles.title}>{title}</Text>
-        {children}
     </Pressable>
     );
 };
@@ -22,9 +23,8 @@ const styles = StyleSheet.create({
     btn: {
         backgroundColor: colors.primary,
         borderRadius: 10,
-        minHeight: '10%',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     title: {
         color: 'white',

@@ -6,8 +6,11 @@ import { colors } from "@/styles/color";
 import MainButton from "@/components/MainButton";
 import InputBox from "@/components/InputBox";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AutenticacaoContext";
 
 const SignUp = () => {
+  const {createNewUser} = useAuth();
+
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
@@ -20,6 +23,10 @@ const SignUp = () => {
     newUser.user.email = email;
     newUser.user.pw = pw;
     console.log(newUser);
+  };
+
+  const sendToApi = async () => {
+    await createNewUser(nome, email, pw);
   };
 
   return (
@@ -62,7 +69,7 @@ const SignUp = () => {
           </View>
 
           <View style={styles.input}>
-            <MainButton title="Registrar" onPress={createJson} disable={false}/>
+            <MainButton title="Registrar" onPress={/*createJson*/sendToApi} disable={false} size={50}/>
           </View>
 
         </ScrollView>
@@ -96,7 +103,7 @@ const styles = StyleSheet.create({
       color: colors.primary
     },
     input: {
-      marginBottom: '5%',
+      marginBottom: 20,
     },
 
   });

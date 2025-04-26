@@ -1,36 +1,88 @@
 import { Link, router } from "expo-router";
-import { StyleSheet, View, Text, TextInput, ScrollView, Modal } from 'react-native';
-import { colors } from "@/styles/color";
+import { StyleSheet, View, Text, TextInput, ScrollView, Modal, Pressable } from 'react-native';
+import { colors, blockColors } from "@/styles/color";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-native-date-picker";
 import { TaskContent } from "@/contexts/TaskContext";
 import AddTaskBtn from "@/components/AddTaskBtn";
 import AddActivityBtn from "@/components/AddActivityBtn";
 import { CalendarUtils } from "react-native-calendars";
+import {Picker} from '@react-native-picker/picker';
+import MainButton from "@/components/MainButton";
+import AddedActivityBox from "@/components/AddedActivityBox";
 
-const materias = ['Linguagens e Literatura', 'História', 'Geografia', 'Filosofia', 'Sociologia', 'Química', 'Física', 'Biologia'];
+const materias = ['Linguagens e Literatura', 'Matemática', 'História', 'Geografia', 'Filosofia', 'Sociologia', 'Química', 'Física', 'Biologia',];
 
 /* DATE PICKER
 https://github.com/henninghall/react-native-date-picker?tab=readme-ov-file
+// SELECT
+https://github.com/react-native-picker/picker?tab=readme-ov-file
 */
 
 const AddRotinaModal = () => {
-    const isPresented = router.canGoBack();
+    //modal
     const [modalVisible, setModal] = useState(false);
-
-    const [date, setDate] = useState(new Date());
+    //hoje
+    const [today, setToday] = useState(new Date());
+    // Task
+    const [date, setDate] = useState(today);
+    const [selectedMateria, setSelectedMateria] = useState(materias[0]);
     const [topic, setTopic] = useState('');
-    const [tasks, setTasks] = useState<TaskContent[]>([]);
+    const [newTasks, setTasks] = useState<TaskContent[]>([]);
+    // TaskContent (Activity)
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [title, setTaskTitle] = useState('');
+    const [summary, setTaskSummary] = useState('');
+    const [selectedColor, setSelectedColor] = useState(blockColors[0].hex);
 
+    /** 
+     * Seta as datas para o formato 'yyyy-mm-dd hh:mm:ss'
+     */
+    const formatDateToTaskContent = (date: Date) => {
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:00`;    
+    };
 
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    /*
+    * Adiciona a task
+    */
+    const addTask = () => {
+    };
+    /*
+    * Adiciona a atividade
+    */
+    const addActivity = () => {
+        const newActivity: TaskContent = {
+            start: startDate,
+            end: endDate,
+            title: title,
+            summary: summary,
+            color: selectedColor,
+        };
 
-    const temp = (newDate: Date) => {
-        //setDate(newDate);
-        console.log(newDate.getFullYear() + '-' + newDate.getMonth() + '-' + newDate.getDate() + ' ' + newDate.getHours() + ':' + newDate.getMinutes() + ':00');
-        //console.log(CalendarUtils.getCalendarDateString(newDate));
+        if(startDate === "") {
+            const start = formatDateToTaskContent(today);
+            newActivity.start = start;
+        }
+        if(endDate === "") {
+            const end = formatDateToTaskContent(today);
+            newActivity.end = end;
+        }
+
+        setTasks(prev => [...prev, newActivity]);
+        setStartDate("");
+        setEndDate("");
+    };
+    /**
+     * Validacoes dos "formularios"
+     */
+    const validateTaskAdd = (): boolean => {
+        return topic.length > 3 ? false : true;
+    };
+    const validateActivityAdd = (): boolean => {
+        return title.length > 3 ? false : true;
     };
 
     return(
@@ -46,23 +98,53 @@ const AddRotinaModal = () => {
                         <ScrollView showsVerticalScrollIndicator={false}>
 
                             <View style={styles.modalHeader}>
-                                <Text style={styles.modalHeaderTxt}>ADICIONAR ATIVIDADE</Text>
+                                <View>
+                                    <Pressable onPress={() => {setModal(!modalVisible)}}>
+                                        <Ionicons name="return-up-back" size={24} color={colors.primary} />
+                                    </Pressable>
+                                </View>
+                                <View>
+                                    <Text style={styles.modalHeaderTxt}>ADICIONAR ATIVIDADE</Text>
+                                </View>
+                                <View />
+                                <View />
                             </View>
                             
 
                             <View style={styles.modalStartEndView}>
 
                                 <View style={{flex: 1}}>
-                                    <Text>Inicio</Text>
-                                    <DatePicker style={{alignSelf: 'center'}} date={startDate} onDateChange={temp} mode="time" theme="light" dividerColor={colors.primary}/>
+                                    <Text style={styles.modalStartEndTxt}>Inicio</Text>
+                                    <DatePicker style={{alignSelf: 'center'}} date={today} onDateChange={(date) => setStartDate(formatDateToTaskContent(date))} mode="time" theme="light" dividerColor={colors.primary}/>
                                 </View>
                                 <View style={{flex: 1}}>
-                                    <Text>Fim</Text>
-                                    <DatePicker style={{alignSelf: 'center'}} date={endDate} onDateChange={temp} mode="time" theme="light" dividerColor={colors.primary}/>
+                                    <Text style={styles.modalStartEndTxt}>Fim</Text>
+                                    <DatePicker style={{alignSelf: 'center'}} date={today} onDateChange={(date) => setEndDate(formatDateToTaskContent(date))} mode="time" theme="light" dividerColor={colors.primary}/>
                                 </View>
 
                             </View>
                             
+                            <View style={styles.modalTxtInputsView}>
+                                <View>
+                                    <Text style={styles.modalTxtInputLabel}>Título</Text>
+                                    <TextInput style={styles.topicInput} value={title} onChangeText={setTaskTitle}/>
+                                </View>
+                                <View>
+                                    <Text style={styles.modalTxtInputLabel}>Descrição</Text>
+                                    <TextInput style={styles.topicInput} value={summary} onChangeText={setTaskSummary}/>
+                                </View>
+                                <View>
+                                    <Text style={styles.modalTxtInputLabel}>Cor</Text>
+                                    <Picker
+                                    selectedValue={selectedColor}
+                                    onValueChange={(itemValue, itemIndex) => setSelectedColor(itemValue)}>
+                                        {blockColors.map((color, i) => <Picker.Item key={i} style={{backgroundColor: color.hex, }} label={color.cor} value={color.hex}/>)}
+                                    </Picker>
+                                </View>
+                            </View>
+                            <View style={styles.modalAddActivityBtn}>
+                                <MainButton title='Adicionar' disable={validateActivityAdd()} onPress={addActivity} size={50}/>
+                            </View>
 
                         </ScrollView>
                     </View>
@@ -74,20 +156,32 @@ const AddRotinaModal = () => {
 
                 <View style={styles.top} />
                 <View style={styles.mid}>
-                    <View style={styles.midL} />
-                    <ScrollView style={styles.midM} showsVerticalScrollIndicator={false}>
+
+                    <View style={styles.header}>
+                        <View />
+                        <View />
+                        <View>
+                            <Text style={styles.headerTxt}>ADICIONAR TAREFAS</Text>
+                        </View>
+                        <View>
+                            <Link href={'../'}>
+                                <Ionicons name="close" size={24} color={colors.primary} />
+                            </Link>
+                        </View>
+                    </View>
+
+                    <ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
 
                         <View style={styles.content}>
-                            <View style={styles.header}>
-                                <View></View>
-                                <Text style={styles.headerTxt}>ADICIONAR TAREFAS</Text>
-                                {isPresented && <Link href={'../'}><Ionicons name="close" size={24} color={colors.primary} /></Link>}
-                            </View>
                             <View style={styles.inputsView}>
 
                                 <View>
                                     <Text style={styles.h2}>Categoria</Text>
-                                    <TextInput placeholder="temporario" style={styles.topicInput} value={topic} onChangeText={setTopic}/>
+                                    <Picker
+                                    selectedValue={selectedMateria}
+                                    onValueChange={(itemValue, itemIndex) => setSelectedMateria(itemValue)}>
+                                        {materias.map((materia, i) => <Picker.Item key={i} label={materia} value={materia}/>)}
+                                    </Picker>
                                 </View>
                                 
 
@@ -105,21 +199,25 @@ const AddRotinaModal = () => {
                                     <View style={styles.addActivityBtn}>
                                         <AddActivityBtn onPress={() => {setModal(!modalVisible)}}/>
                                     </View>
-                                    {tasks.length > 0 ? <></> : <Text style={styles.noActivityTxt}>Nenhuma atividade adicionada</Text>}
+                                    {
+                                    newTasks.length > 0 ?
+                                        newTasks.map((task, i) => <AddedActivityBox key={i} atividade={task} id={i}/>) 
+                                        : 
+                                        <Text style={styles.noActivityTxt}>Nenhuma atividade adicionada</Text>
+                                    }
                                 </View>
 
                                 <View style={styles.addTaskBtn}>
-                                    <AddTaskBtn />
+                                    <MainButton title='Adicionar tarefa' disable={validateTaskAdd()} onPress={addTask} size={50}/>
                                 </View>
                                 
                             </View>
                         </View>
                         
                     </ScrollView>
-                    <View style={styles.midR} />
+
                 </View>
                 <View style={styles.bottom} />
-
             </View>
         </>
     );
@@ -131,33 +229,18 @@ const styles = StyleSheet.create({
         height: '100%',
     },
 
-
     top: {
         flex: 1,
         backgroundColor: colors.modalBackground,
     },
     mid: {
         flex: 9,
-        flexDirection: 'row',
-        backgroundColor: colors.modalBackground,
+        backgroundColor: colors.viewWBackground,
     },
     bottom: {
         flex: 1,
         backgroundColor: colors.modalBackground,
     },
-
-
-    midL: {
-        flex: 1,
-    },
-    midM: {
-        backgroundColor: 'white',
-        borderRadius: 10,
-    },
-    midR: {
-        flex: 1,
-    },
-
 
     content: {
         flex: 1,
@@ -192,6 +275,7 @@ const styles = StyleSheet.create({
         borderWidth: 1, //temp
         borderRadius: 5,
         borderColor: colors.borderLgrey,
+        paddingHorizontal: 5,
     },
 
     addActivityBtn: {
@@ -224,8 +308,9 @@ const styles = StyleSheet.create({
     modalMainBottom: {
         flex: 1,
     },
-
     modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
         marginVertical: 18,
     },
     modalHeaderTxt: {
@@ -235,7 +320,21 @@ const styles = StyleSheet.create({
     },
     modalStartEndView: {
         flexDirection: 'row'
-    }
+    },
+    modalStartEndTxt: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    modalTxtInputLabel: {
+        fontWeight: 'bold',
+    },
+    modalTxtInputsView: {
+        paddingHorizontal: 5,
+    },
+    modalAddActivityBtn: {
+        paddingHorizontal: 50,
+        marginTop: 10,
+    },
 });
 
 export default AddRotinaModal;

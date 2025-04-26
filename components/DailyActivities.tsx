@@ -19,15 +19,19 @@ const DailyActivities = () => {
                 </Text>
             </View>
             <View style={styles.content}>
-                <FlatList 
-                horizontal
-                data={tasks}
-                keyExtractor={(item) => item.id}
-                renderItem={({item}) => <DailyActivityBox activity={item}/>}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.listContainer}
-                ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-                />
+                {
+                    tasks.length > 0 ? 
+                    <FlatList 
+                    horizontal
+                    data={tasks}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({item}) => <DailyActivityBox activity={item}/>}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.listContainer}
+                    ItemSeparatorComponent={() => <View style={{ width: 10 }} />}/>
+                    :
+                    <Text style={styles.noActivitiesTxt}>Sem atividades cadastradas</Text>
+                }
             </View>
         </View>
     );
@@ -48,10 +52,15 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
+        justifyContent: 'center'
     },
     listContainer: {
         padding: 10
     },
+    noActivitiesTxt: {
+        color: 'white',
+        textAlign: 'center',
+    }
 });
 
 export default DailyActivities;

@@ -17,7 +17,6 @@ const HomeScreen = () => {
     <View style={styles.mainView}>
         
       <Header top={top} iconhref='/config'>
-        <FontAwesome name="gear" size={24} color={colors.primary} style={styles.icon}/>
       </Header>
 
       <View style={styles.welcomeHeader}>

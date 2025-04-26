@@ -9,7 +9,7 @@ type Props = PropsWithChildren<{
 const AddActivityBtn = ({onPress}: Props) => {
     return(
         <View style={styles.main}>
-            <Pressable onPress={onPress}>
+            <Pressable onPress={onPress} android_ripple={{radius: 5}}>
                 <Text style={styles.text}>+</Text>
             </Pressable>
         </View>

@@ -48,11 +48,11 @@ const Login = () => {
                 </View>
                 
                 <View style={styles.inputsView}>
-                  <View>
+                  <View style={styles.inputBoxView}>
                     <InputBox title={"Email"} bkgColor={colors.secondary} inputmode="email" keyboardtype="email-address" onChangeText={text => {setEmail(text)}}/>
                   </View>
                   
-                  <View>
+                  <View style={styles.inputBoxView}>
                     <InputBox title={"Senha"} bkgColor={colors.secondary} isSecure={true} onChangeText={text => {setPw(text)}}/>
                   </View>
                 </View>
@@ -66,7 +66,7 @@ const Login = () => {
                 </View>
 
                 <View style={styles.btnView}>
-                  <MainButton title="Entrar" onPress={() => loginApp()} disable={false}/>
+                  <MainButton title="Entrar" onPress={() => loginApp()} disable={false} size={50}/>
                 </View>
 
             </View>
@@ -107,6 +107,9 @@ const styles = StyleSheet.create({
   inputsView: {
     marginBottom: '5%'
   },
+  inputBoxView: {
+    marginBottom: 20,
+  },
   pwOptionsView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -135,6 +138,7 @@ const styles = StyleSheet.create({
   link: {
       color: colors.primary,
   },
+
 });
 
 export default Login;

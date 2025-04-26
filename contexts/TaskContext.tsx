@@ -59,10 +59,10 @@ const tasksMock : Task[] = [
         materia: 'Física',
         topico: 'Física 2',
         tempototal: 8,
-        data: '2025-04-17',
+        data: '2025-04-25',
         tasks: [
-            {start: '2025-04-17 09:20:00', end: '2025-04-17 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-            {start: '2025-04-17 20:00:00', end: '2025-04-17 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+            {start: '2025-04-25 09:20:00', end: '2025-04-25 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
+            {start: '2025-04-25 20:00:00', end: '2025-04-25 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
     }
 ];
 // \mock

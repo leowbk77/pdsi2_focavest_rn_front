@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { saveToken, getToken, deleteToken } from "@/services/storage";
 import api from "@/services/api";
+import { router } from "expo-router";
 
 interface AutenticacaoContextType {
     token: string | null;
@@ -10,6 +11,8 @@ interface AutenticacaoContextType {
 
     loginFromJson: (email: string, pw: string) => Promise<void>;
     logoutJson: () => void;
+
+    createNewUser: (nome:string, email:string, senha:string) => Promise<void>;
 };
 
 interface UserInfoContextType {
@@ -88,6 +91,21 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
         setIsAuth(false);
     };
 
+    const createNewUser = async (nome: string, email: string, senha: string) => {
+
+        const newUser = {
+            nome: nome,
+            email: email,
+            senha: senha,
+        };
+
+        try {
+            console.log('enviando registro: ', nome, email, senha);
+            const response = await api.post('https://focavest-backend.onrender.com/api/auth/register', newUser).then((response) => {console.log(response)});
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     /* ============================================== MOCK FROM JSON ==============================================*/
     const json = require('@/assets/temp/json/auth.json');
@@ -100,6 +118,7 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
                 await saveToken(json.token);
                 fetchUserInfoFromJson();
                 setIsAuth(true);
+                console.log('login');
             }
         } catch (error) {
             console.log("cannot login: ", error);
@@ -114,6 +133,10 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
             setUserCursos([]);
             setUserImage("");
             await deleteToken();
+            setIsAuth(false);
+            console.log('Logout');
+
+            //router.replace('/');
             // delete api.defaults.headers.common['Authorization'];
         }
     };
@@ -144,6 +167,7 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
             token, isAuthenticated,
             login, logout,
             loginFromJson, logoutJson,
+            createNewUser,
             //userInfo
             userName, userAge,
             userCursos, userImage,

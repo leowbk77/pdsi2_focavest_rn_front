@@ -1,21 +1,34 @@
 import { useEffect } from 'react';
-import {StyleSheet, Text, View,} from 'react-native';
+import {StyleSheet, Text, View, Pressable} from 'react-native';
 import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { colors } from '@/styles/color';
-
-import Header from '@/components/Header';
-
-import {Platform, StatusBar } from 'react-native';
 import { useAuth } from '@/contexts/AutenticacaoContext';
+import Header from '@/components/Header';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import {Platform, StatusBar } from 'react-native';
+import { router } from 'expo-router';
+import Vests from '@/components/Vests';
+
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
 const Profile = () => {
 
-    const { userName, userCursos, 
-            userAge, userCity,
-            data, pfp,
-            uni, curso, site,} = useAuth();
+    const { 
+        userName, userCursos, 
+        userAge, userCity,
+        data, pfp,
+        uni, curso, site,
+        logoutJson, isAuthenticated,
+    } = useAuth();
+
+    useEffect(() => {
+        if(!isAuthenticated) {
+          console.log('Autenticado: ',isAuthenticated);
+          console.log('============================================================');
+          router.replace('/');
+        }
+      }, [isAuthenticated]);
 
     return (
         <View style={styles.mainView}>
@@ -52,8 +65,16 @@ const Profile = () => {
                 </View>
             </View>
 
-            <View>
+            <View style={styles.vestsView}>
                 <Text style={styles.h1}>Vestibulares selecionados</Text>
+                <Vests/>
+            </View>
+
+            <View style={styles.logoutView}>
+                <Pressable style={{flexDirection: 'row'}} onPress={logoutJson}>
+                    <MaterialIcons name="logout" size={24} color={colors.primary} />
+                    <Text>Sair</Text>
+                </Pressable>
             </View>
         </View>
     );
@@ -133,7 +154,16 @@ const styles = StyleSheet.create({
     },
     nextVestInfoView: {
         marginLeft: '5%',
-    }
+    },
+    vestsView: {
+        flex: 1,
+        borderBottomWidth: 1,
+    },
+    logoutView: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+        paddingVertical: 15,
+    },
 });
 
 export default Profile;
