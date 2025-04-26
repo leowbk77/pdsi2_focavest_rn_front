@@ -25,6 +25,7 @@ const Login = () => {
       if(isAuthenticated) {
         console.log('Autenticado: ',isAuthenticated);
         console.log('============================================================');
+        console.log(atob('VEVYVE8gQkFTRSBTRVNTRU5UQSBFIFFVQVRSTw=='));
         router.replace('/');
       }
     }, [isAuthenticated]);
