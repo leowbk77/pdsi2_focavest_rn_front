@@ -1,18 +1,19 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import api from "@/services/api";
 import { CalendarUtils } from "react-native-calendars";
+import { lectures } from "@/components/LectureIcons";
 
 // mock
 const tasksMock : Task[] = [
     {
         id: "1",
-        materia: 'Matematica',
+        materia: 'Matemática',
         topico: 'Matematica 1',
         tempototal: 22,
         data: '2025-04-13',
         tasks: [
-            {start: '2025-04-13 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-            {start: '2025-04-13 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+            {start: '2025-04-13 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
+            {start: '2025-04-13 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
     },
     {
         id: "2",
@@ -21,28 +22,28 @@ const tasksMock : Task[] = [
         tempototal: 14,
         data: '2025-04-14',
         tasks: [
-            {start: '2025-04-14 09:20:00', end: '2025-04-14 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-            {start: '2025-04-14 20:00:00', end: '2025-04-14 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+            {start: '2025-04-14 09:20:00', end: '2025-04-14 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
+            {start: '2025-04-14 20:00:00', end: '2025-04-14 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
     },
     {
         id: "3",
-        materia: 'Matematica',
+        materia: 'Matemática',
         topico: 'Matematica 1',
         tempototal: 10,
         data: '2025-04-21',
         tasks: [
-            {start: '2025-04-21 09:20:00', end: '2025-04-21 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-            {start: '2025-04-21 20:00:00', end: '2025-04-21 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+            {start: '2025-04-21 09:20:00', end: '2025-04-21 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
+            {start: '2025-04-21 20:00:00', end: '2025-04-21 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
     },
     {
         id: "4",
-        materia: 'Matematica',
+        materia: 'Matemática',
         topico: 'Matematica 1',
         tempototal: 8,
         data: '2025-04-21',
         tasks: [
-            {start: '2025-04-21 09:20:00', end: '2025-04-21 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-            {start: '2025-04-21 20:00:00', end: '2025-04-21 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+            {start: '2025-04-21 09:20:00', end: '2025-04-21 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
+            {start: '2025-04-21 20:00:00', end: '2025-04-21 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
     },
     {
         id: "5",
@@ -51,8 +52,8 @@ const tasksMock : Task[] = [
         tempototal: 7,
         data: '2025-04-17',
         tasks: [
-            {start: '2025-04-17 09:20:00', end: '2025-04-17 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-            {start: '2025-04-17 20:00:00', end: '2025-04-17 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+            {start: '2025-04-17 09:20:00', end: '2025-04-17 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
+            {start: '2025-04-17 20:00:00', end: '2025-04-17 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
     },
     {
         id: "6",
@@ -61,8 +62,8 @@ const tasksMock : Task[] = [
         tempototal: 8,
         data: '2025-04-25',
         tasks: [
-            {start: '2025-04-25 09:20:00', end: '2025-04-25 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8'}, 
-            {start: '2025-04-25 20:00:00', end: '2025-04-25 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8'}]
+            {start: '2025-04-25 09:20:00', end: '2025-04-25 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
+            {start: '2025-04-25 20:00:00', end: '2025-04-25 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
     }
 ];
 // \mock
@@ -73,6 +74,7 @@ interface TaskProviderProps {
 };
 
 export interface TaskContent {
+    id: string;
     start: string;
     end: string;
     title: string;
@@ -84,12 +86,13 @@ export interface Task {
     id: string,
     materia: string, // number ? identificar as materias por enum
     topico: string,
-    tempototal: number,
+    tempototal?: number,
     data: string,
     tasks: TaskContent[],
 };
 
 interface TaskContext {
+    materias: string[];
     today: Date;
     tasks: Task[];
     addTask: (task: Task) => void;
@@ -103,6 +106,7 @@ export const TaskContext = createContext<TaskContext | undefined>(undefined);
 export const TaskContextProvider = ({children,}: TaskProviderProps) => {
     const [tasks, setTasks] = useState<Task[]>(tasksMock);
     const today = new Date();
+    const materias = lectures;
 
     const addTask = async (task: Task) => {
         setTasks(prev => [...prev, task]);
@@ -121,6 +125,7 @@ export const TaskContextProvider = ({children,}: TaskProviderProps) => {
         <TaskContext.Provider value={{
             today,
             tasks,
+            materias,
             addTask, removeTask,
             todayTasks
         }}>{children}

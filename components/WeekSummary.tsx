@@ -1,5 +1,6 @@
 import { colors } from "@/styles/color";
 import { View, Text, StyleSheet } from "react-native";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const WeekSummary = () => {
     return(
@@ -11,7 +12,11 @@ const WeekSummary = () => {
                 </View>
 
                 <View style={styles.hoursTxtView}>
-                    <Text style={[styles.hoursTxt, {color: colors.primary, fontWeight: 'bold'}]}>Tempo estudado</Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <FontAwesome name="hourglass-3" size={16} color={colors.primary} />
+                        <Text style={[styles.hoursTxt, {color: colors.primary, fontWeight: 'bold', marginLeft: 5,}]}>Tempo estudado</Text>
+                    </View>
+                    
                     <Text style={styles.hoursTxt}>{}h estudadas de</Text>
                     <Text style={styles.hoursTxt}>{}h planejadas.</Text>
                 </View>

@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         flex: 9,
         backgroundColor: colors.viewWBackground,
         marginHorizontal: 10,
-        boxShadow: colors.boxShadowDefault
+        boxShadow: colors.boxShadowModal
     },
     modalMainB: {
         flex: 1

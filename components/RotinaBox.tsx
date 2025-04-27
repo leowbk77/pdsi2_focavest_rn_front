@@ -1,10 +1,14 @@
-import { Modal, StyleSheet, Text, View, Pressable } from "react-native";
+import { Modal, StyleSheet, Text, View, Pressable, ScrollView, TextInput, } from "react-native";
 import { colors } from "@/styles/color";
 import { PropsWithChildren, useState } from "react";
 import Checkbox from "expo-checkbox";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from "expo-image";
-import icons from "./LectureIcons";
-import { Task } from "@/contexts/TaskContext";
+import { icons} from "./LectureIcons";
+import { Task, TaskContent, useTaskInfo } from "@/contexts/TaskContext";
+import MainButton from "./MainButton";
+import DatePicker from "react-native-date-picker";
+import {Picker} from '@react-native-picker/picker';
 
 type Props = PropsWithChildren<{
     icon?: string;
@@ -16,9 +20,50 @@ const RotinaBox = ({icon, task}: Props) => {
     const [boxId, setBoxId] = useState(task.id);
     const [modalVisible, setModal] = useState(false);
 
+    const {materias, today, tasks, addTask, removeTask} = useTaskInfo();
+
+    // Estados para edição
+    const [selectedMateria, setSelectedMateria] = useState(task.materia);
+    const [topic, setTopic] = useState(task.topico);
+    const [date, setDate] = useState(new Date(task.data));
+    const [taskList, setTaskList] = useState<TaskContent[]>(task.tasks);
+
+    // Modal de adicionar atividade
+    const [addActivityModal, setAddActivityModal] = useState(false);
+
+    // Funções auxiliares
+    const removeActivity = (id: string) => {
+        setTaskList(prev => prev.filter(task => task.id !== id));
+    };
+
+    const confirmEditTask = () => {
+        const editedTask: Task = {
+            id: task.id,
+            materia: selectedMateria,
+            topico: topic,
+            data: formatDateToTaskContent(date),
+            tasks: taskList,
+            tempototal: taskList.length * 10, // Exemplo: cada atividade vale 10min
+        };
+
+        // Remove a antiga e adiciona a nova
+        removeTask(task.id);
+        addTask(editedTask);
+        setModal(false);
+    };
+
+    const validateTaskEdit = () => {
+        return topic.length <= 3;
+    };
+
+    const formatDateToTaskContent = (date: Date) => {
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    };
+
     const butao = () => {
         setChecked(!isChecked);
-        console.log(isChecked, boxId);
+        console.log(icon, boxId);
     };
 
     return (
@@ -27,11 +72,95 @@ const RotinaBox = ({icon, task}: Props) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {setModal(!setModal);}}>
+
             <View style={styles.modalMain}>
-                <View style={styles.modalMainTop}></View>
-                <View style={styles.modalMainMid}></View>
-                <View style={styles.modalMainBottom}></View>
+                <View style={styles.modalMainTop}/>
+                <View style={styles.modalMainMid}>
+
+                    <View style={styles.modalHeader}>
+                        <View>
+                            <Pressable onPress={() => {setModal(!modalVisible)}}>
+                                <Ionicons name="return-up-back" size={24} color={colors.primary} />
+                            </Pressable>
+                        </View>
+                        <View>
+                            <Text style={styles.modalHeaderTxt}>EDIÇÃO</Text>
+                        </View>
+                        <View />
+                    </View>
+                    
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        
+                        <View style={{ paddingHorizontal: 10 }}>
+                            {/* MATÉRIA */}
+                            <Text style={styles.txtDecorated}>Categoria</Text>
+                            <Picker
+                                selectedValue={selectedMateria}
+                                onValueChange={(itemValue) => setSelectedMateria(itemValue)}
+                            >
+                                {materias.map((materia, i) => (
+                                    <Picker.Item key={i} label={materia} value={materia} />
+                                ))}
+                            </Picker>
+
+                            {/* TÓPICO */}
+                            <Text style={styles.txtDecorated}>Tópico</Text>
+                            <TextInput
+                                style={styles.topicInput}
+                                value={topic}
+                                onChangeText={setTopic}
+                            />
+
+                            {/* DATA */}
+                            <Text style={styles.txtDecorated}>Data</Text>
+                            <DatePicker
+                                date={date}
+                                onDateChange={setDate}
+                                mode="date"
+                                theme="light"
+                                dividerColor={colors.primary}
+                            />
+
+                            {/* ATIVIDADES */}
+                            <Text style={[styles.txtDecorated, { marginTop: 10 }]}>Atividades</Text>
+                            {taskList.length > 0 ? (
+                                taskList.map((atividade, i) => (
+                                    <View key={i} style={{ marginVertical: 5 }}>
+                                        <Text>{atividade.title}</Text>
+                                        <Text style={{ fontSize: 12 }}>{atividade.start} até {atividade.end}</Text>
+                                        <Pressable onPress={() => removeActivity(atividade.id)}>
+                                            <Text style={{ color: 'red' }}>Remover</Text>
+                                        </Pressable>
+                                    </View>
+                                ))
+                            ) : (
+                                <Text style={{ fontStyle: 'italic' }}>Nenhuma atividade adicionada</Text>
+                            )}
+
+                            {/* BOTÃO ADICIONAR NOVA ATIVIDADE */}
+                            <View style={{ marginVertical: 10 }}>
+                                <MainButton
+                                    title="Adicionar nova atividade"
+                                    onPress={() => setAddActivityModal(true)}
+                                    size={50}
+                                />
+                            </View>
+
+                            {/* BOTÃO SALVAR ALTERAÇÕES */}
+                            <MainButton
+                                title="Salvar Alterações"
+                                onPress={confirmEditTask}
+                                disable={validateTaskEdit()}
+                                size={50}
+                            />
+                        </View>
+
+                    </ScrollView>
+
+                </View>
+                <View style={styles.modalMainBottom}/>
             </View>
+
         </Modal>
 
         <View style={styles.main}>
@@ -49,7 +178,7 @@ const RotinaBox = ({icon, task}: Props) => {
 
                     <View style={styles.centerInfo}>
                         <Text style={styles.txtDecorated}>{task.materia}</Text>
-                        <Text>{task.topico}</Text>
+                        <Text numberOfLines={2}>{task.topico}</Text>
                     </View>
 
                 </View>
@@ -66,7 +195,7 @@ const RotinaBox = ({icon, task}: Props) => {
                 <View style={{}}>
                     <Pressable
                     onPress={() => {setModal(true)}}>
-                        <Text style={styles.txtDecoratedBtn}>Editar rotina</Text>
+                        <Text style={styles.txtDecoratedBtn}>Editar</Text>
                     </Pressable>
                     
                 </View>
@@ -143,11 +272,26 @@ const styles = StyleSheet.create({
     },
     modalMainMid: {
         flex: 8,
-        backgroundColor: 'red',
+        backgroundColor: colors.viewWBackground,
+        marginHorizontal: 10,
+        boxShadow: colors.boxShadowModal,
     },
     modalMainBottom: {
         flex: 1,
     },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginVertical: 18  ,
+    },
+    modalHeaderTxt: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    modalContent: {
+
+    }
 });
 
 export default RotinaBox;

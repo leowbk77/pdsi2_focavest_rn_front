@@ -4,15 +4,13 @@ import { colors, blockColors } from "@/styles/color";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from "react";
 import DatePicker from "react-native-date-picker";
-import { TaskContent, useTaskInfo } from "@/contexts/TaskContext";
+import { Task, TaskContent, useTaskInfo } from "@/contexts/TaskContext";
 import AddTaskBtn from "@/components/AddTaskBtn";
 import AddActivityBtn from "@/components/AddActivityBtn";
 import { CalendarUtils } from "react-native-calendars";
 import {Picker} from '@react-native-picker/picker';
 import MainButton from "@/components/MainButton";
 import AddedActivityBox from "@/components/AddedActivityBox";
-
-const materias = ['Linguagens e Literatura', 'Matemática', 'História', 'Geografia', 'Filosofia', 'Sociologia', 'Química', 'Física', 'Biologia',];
 
 /* DATE PICKER
 https://github.com/henninghall/react-native-date-picker?tab=readme-ov-file
@@ -23,8 +21,8 @@ https://github.com/react-native-picker/picker?tab=readme-ov-file
 const AddRotinaModal = () => {
     //modal
     const [modalVisible, setModal] = useState(false);
-    //hoje
-    const {today} = useTaskInfo();
+    //TaskContext
+    const {today, materias, addTask} = useTaskInfo();
     // Task
     const [date, setDate] = useState(today);
     const [selectedMateria, setSelectedMateria] = useState(materias[0]);
@@ -48,13 +46,24 @@ const AddRotinaModal = () => {
     /*
     * Adiciona a task
     */
-    const addTask = () => {
+    const confirmAddTask = () => {
+        const newTask: Task = {
+            id: '',
+            materia: selectedMateria,
+            topico: topic,
+            data: formatDateToTaskContent(date),
+            tasks: newTasks,
+        };
+        addTask(newTask);
     };
+
     /*
     * Adiciona a atividade
     */
     const addActivity = () => {
+        const id = Date.now().toString(); // Gera ID único baseado no timestamp atual -> obrigado GPT
         const newActivity: TaskContent = {
+            id: id,
             start: startDate,
             end: endDate,
             title: title,
@@ -70,11 +79,19 @@ const AddRotinaModal = () => {
             const end = formatDateToTaskContent(today);
             newActivity.end = end;
         }
-
+        
         setTasks(prev => [...prev, newActivity]);
         setStartDate("");
         setEndDate("");
     };
+
+    /*
+    *  Remove a atividade
+    */
+    const removeActivity = (id: string) => {
+        setTasks(prev => prev.filter(task => task.id !== id));
+    };
+
     /**
      * Validacoes dos "formularios"
      */
@@ -201,20 +218,21 @@ const AddRotinaModal = () => {
                                     </View>
                                     {
                                     newTasks.length > 0 ?
-                                        newTasks.map((task, i) => <AddedActivityBox key={i} atividade={task} id={i}/>) 
+                                        newTasks.map((task, i) => <AddedActivityBox key={i} atividade={task} id={task.id} remove={removeActivity}/>) 
                                         : 
                                         <Text style={styles.noActivityTxt}>Nenhuma atividade adicionada</Text>
                                     }
                                 </View>
 
-                                <View style={styles.addTaskBtn}>
-                                    <MainButton title='Adicionar tarefa' disable={validateTaskAdd()} onPress={addTask} size={50}/>
-                                </View>
                                 
                             </View>
                         </View>
                         
                     </ScrollView>
+
+                    <View style={styles.addTaskBtn}>
+                        <MainButton title='Adicionar tarefa' disable={validateTaskAdd()} onPress={confirmAddTask} size={50}/>
+                    </View>
 
                 </View>
                 <View style={styles.bottom} />
@@ -283,7 +301,8 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     addTaskBtn: {
-        marginTop: 10,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
     },
 
     noActivityTxt: {

@@ -10,6 +10,7 @@ import { useTaskInfo } from '@/contexts/TaskContext';
 import {Platform, StatusBar } from 'react-native';
 
 import { useEffect } from "react";
+import { iconLecture } from "@/components/LectureIcons";
 
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
@@ -41,7 +42,7 @@ const RotinasScreen = () => {
                     <Text style={styles.emptyText}>Nenhuma rotina encontrada.</Text>
                 }
                 renderItem={({ item }) => (
-                    <RotinaBox task={item} icon="math"/>
+                    <RotinaBox task={item} icon={iconLecture[item.materia]}/>
                 )}
                 renderSectionHeader={({ section: { title } }) => (
                     <Text style={styles.dateTitle}>{title}</Text>
