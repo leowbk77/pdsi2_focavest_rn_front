@@ -3,9 +3,40 @@ import { saveToken, getToken, deleteToken } from "@/services/storage";
 import api from "@/services/api";
 import { router } from "expo-router";
 
+const userMock: Login = {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywiaWF0IjoxNjkxMjM4NzYyLCJleHAiOjE2OTEyNDIzNjJ9.D2Vsb2dvLXVzZXItYXV0aC10b2tlbg",
+    "user": {
+      "id": "123",
+      "nome": "João da Silva",
+      "email": "joao.silva@email.com",
+      "idade": 28,
+      "cidade": "São Paulo",
+      "cursos": [
+        "Ciência da Computação",
+        "Engenharia de Software",
+        "Análise e Desenvolvimento de Sistemas"],
+      "image": "https://cataas.com/cat"
+    }
+};
+
+const emptyUser: Login = {
+    token: '', 
+    user: {
+        id: '', 
+        nome: '',
+        idade: 0,
+        email: '',
+        cursos: [],
+        image: '',
+        cidade: '',
+    }
+};
+
 interface AutenticacaoContextType {
     token: string | null;
     isAuthenticated: boolean;
+    userInfo: Login,
+
     login: (email: string, pw: string) => Promise<void>;
     logout: () => void;
 
@@ -15,68 +46,34 @@ interface AutenticacaoContextType {
     createNewUser: (nome:string, email:string, senha:string) => Promise<void>;
 };
 
-interface UserInfoContextType {
-    userName: string;
-    setUserName: (name: string) => void;
-
-    userAge: string;
-    setUserAge: (age: string) => void;
-
-    userCity: string;
-    setUserCity: (city: string) => void;
-
-    userCursos: string[];
-    setUserCursos: (cursos: string[]) => void;
-
-    userImage: string | null;
-    setUserImage: (image: string | null) => void;
-
-    fetchUserData: (userId: string) => Promise<void>;
-
-    fetchUserInfoFromJson: () => Promise<void>;
-}
-
-interface NextVestContextType {
-    data: string;
-    setData: (dataStr: string) => void;
-  
-    pfp: string;
-    setPfp: (pfpStr: string) => void;
-  
-    uni: string;
-    setUni: (uniStr: string) => void;
-  
-    curso: string;
-    setCurso: (cursoStr: string) => void;
-  
-    site: string;
-    setSite: (siteStr: string) => void;
-}
-
-interface AuthProviderProps {
-    children: ReactNode;
+interface User {
+    id: string,
+    nome: string,
+    idade: number,
+    cidade?: string,
+    email: string,
+    cursos: string[],
+    image?: string,
 };
 
-type AutenticacaoType = AutenticacaoContextType & NextVestContextType & AuthProviderProps & UserInfoContextType;
+interface Login {
+    token: string,
+    user: User,
+};
+
+interface AuthProviderProps {
+    children?: ReactNode;
+};
+
+type AutenticacaoType = AutenticacaoContextType & AuthProviderProps;
 export const AutenticacaoContext = createContext<AutenticacaoType | undefined>(undefined);
 
 export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState<string>('');
     const [isAuthenticated, setIsAuth] = useState(false);
 
-    const [userName, setUserName] = useState("");
-    const [userAge, setUserAge] = useState("");
-    const [userCity, setUserCity] = useState("");
-    const [userCursos, setUserCursos] = useState<string[]>([]);
-    const [userImage, setUserImage] = useState<string | null>(null);
-
-    const [data, setData] = useState("");
-    const [pfp, setPfp] = useState("");
-    const [uni, setUni] = useState("");
-    const [curso, setCurso] = useState("");
-    const [site, setSite] = useState("");
+    const [userInfo, setUserInfo] = useState<Login>(userMock);
     
-
     const login = async (email: string, pw: string) => {
         try {
             console.log("login", email, pw);
@@ -92,7 +89,6 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
     };
 
     const createNewUser = async (nome: string, email: string, senha: string) => {
-
         const newUser = {
             nome: nome,
             email: email,
@@ -107,16 +103,14 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
         }
     };
 
-    /* ============================================== MOCK FROM JSON ==============================================*/
-    const json = require('@/assets/temp/json/auth.json');
 
+    /* ============================================== MOCK ==============================================*/
     const loginFromJson = async (email: string, pw: string) => {
         try {
-            if(json.user.email == email) {
-                setToken(json.token);
+            if(userInfo.user.email == email) {
+                setToken(userInfo.token);
                 // api.defaults.headers.common['Authorization'] = `Bearer ${receivedToken}`;
-                await saveToken(json.token);
-                fetchUserInfoFromJson();
+                await saveToken(userInfo.token);
                 setIsAuth(true);
                 console.log('login');
             }
@@ -127,37 +121,13 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
 
     const logoutJson = async () => {
         if(isAuthenticated) {
-            setToken(null);
-            setUserName("");
-            setUserCity("");
-            setUserCursos([]);
-            setUserImage("");
+            setToken('');
+            setUserInfo(emptyUser);
             await deleteToken();
             setIsAuth(false);
             console.log('Logout');
-
             //router.replace('/');
             // delete api.defaults.headers.common['Authorization'];
-        }
-    };
-
-    const fetchUserInfoFromJson = async () => {
-        try {
-            const userInfoJson = json.user
-            setUserName(userInfoJson.nome);
-            setUserAge(userInfoJson.idade);
-            setUserCity(userInfoJson.cidade);
-            setUserCursos(userInfoJson.cursosDesejados.join(", "));
-            setUserImage(userInfoJson.image);
-          
-            const nextVestJson = require("@/assets/temp/json/prox_vest.json");
-            setData(nextVestJson.data);
-            setPfp(nextVestJson.pfp);
-            setUni(nextVestJson.universidade);
-            setCurso(nextVestJson.curso_desejado);
-            setSite(nextVestJson.site);
-        } catch (error) {
-            console.error("Erro ao buscar dados do usuário:", error);
         }
     };
     /* ============================================== MOCK FROM JSON ==============================================*/
@@ -165,17 +135,12 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
     return(
         <AutenticacaoContext.Provider value={{
             token, isAuthenticated,
+            userInfo,
+
             login, logout,
             loginFromJson, logoutJson,
+
             createNewUser,
-            //userInfo
-            userName, userAge,
-            userCursos, userImage,
-            userCity,
-            //nextVest
-            data, pfp,
-            uni, curso,
-            site,
         }}>
             {children}
         </AutenticacaoContext.Provider>

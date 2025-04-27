@@ -47,6 +47,15 @@ const vestsMock = [
     "site": "ceps.ufpa.br/"
   }
 ];
+
+const nextVestMock: Vest = {
+  "id": "6",
+  "data": "27/04/2025",
+  "pfp": "", //https://feciv.ufu.br/sites/feciv.ufu.br/files/ufu.png
+  "uni": "Universidade Federal de Uberlândia",
+  "curso": "Sistemas de Informação",
+  "site": "ufu.br/"
+};
 //\mock
 
 // interfaces
@@ -58,13 +67,14 @@ export interface Vest {
     id: string,
     data: string,
     pfp?: string,
-    uni: string, // pode ser mudado no futuro com um cadastro prévio das universidades
+    uni: string,
     curso: string,
     site?: string,
 };
 
 interface VestContext {
     vests: Vest[];
+    nextVest: Vest;
     addVest: (vest: Vest) => void;
     removeVest: (id: string) => void;
 }
@@ -74,6 +84,7 @@ export const VestContext = createContext<VestContext | undefined>(undefined);
 
 export const VestContextProvider = ({children,}: VestProviderProps) => {
     const [vests, setVests] = useState<Vest[]>(vestsMock);
+    const [nextVest, setNextVest] = useState<Vest>(nextVestMock);
 
     const addVest = async (vest: Vest) => {
         setVests(prev => [...prev, vest]);
@@ -85,7 +96,7 @@ export const VestContextProvider = ({children,}: VestProviderProps) => {
 
     return(
         <VestContext.Provider value={{
-            vests,
+            vests, nextVest,
             addVest, removeVest,
         }}>
             {children}

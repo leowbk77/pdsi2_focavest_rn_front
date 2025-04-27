@@ -9,18 +9,18 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {Platform, StatusBar } from 'react-native';
 import { router } from 'expo-router';
 import Vests from '@/components/Vests';
+import { useVest } from '@/contexts/VestContext';
 
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
 const Profile = () => {
 
-    const { 
-        userName, userCursos, 
-        userAge, userCity,
-        data, pfp,
-        uni, curso, site,
+    const {
+        userInfo,
         logoutJson, isAuthenticated,
     } = useAuth();
+
+    const {nextVest} = useVest();
 
     useEffect(() => {
         if(!isAuthenticated) {
@@ -41,26 +41,36 @@ const Profile = () => {
                 <Image source="https://cataas.com/cat" style={styles.imgPfp}/>
                 <View style={styles.userInfoTextView}>
                     <Text style={styles.h1}>Nome do usuário</Text>
-                    <Text style={styles.txt}>{userName}</Text>
-                    <Text style={styles.h1}>Idade: <Text style={styles.txt}>{userAge}</Text> y</Text>
-                    <Text style={styles.h1}>Cidade: <Text style={styles.txt}>{userCity}</Text> </Text>
+                    <Text style={styles.txt}>{userInfo.user.nome}</Text>
+                    <Text style={styles.h1}>Idade: <Text style={styles.txt}>{userInfo.user.idade}</Text> y</Text>
+                    <Text style={styles.h1}>Cidade: <Text style={styles.txt}>{userInfo.user.cidade}</Text> </Text>
                 </View>
             </View>
 
             <View style={styles.vestView}>
-                <Text style={styles.h1}>Cursos desejados: <Text style={styles.txt}>{userCursos}</Text></Text>
+                <Text style={styles.h1}>Cursos desejados: <Text style={styles.txt}>{userInfo.user.cursos.join(", ")}</Text></Text>
                 <View style={styles.nextVestHeader}>
                     <Text style={styles.h1}>Próximo vestibular</Text>
                     <View style={styles.hr}></View>
-                    <Text style={styles.txt}>31/03/2025{}</Text>
+                    <Text style={styles.txt}>{nextVest.data}</Text>
                 </View>
 
                 <View style={styles.nextVest}>
-                    <Image source={pfp} style={styles.imgPfpSm}/>
+
+                    {
+                    nextVest.pfp ? 
+                        <Image source={nextVest.pfp} style={styles.imgPfpSm}/> :
+                        <FontAwesome name="university" size={50} color="black" />
+                    }
+                    
                     <View style={styles.nextVestInfoView}>
-                        <Text style={styles.h2}>Universidade: <Text style={styles.txt}>{uni}</Text></Text>
-                        <Text style={styles.h2}>Curso desejado: <Text style={styles.txt}>{curso}</Text></Text>
-                        <Text style={styles.h2}>Site: <Text style={styles.txt}>{site}</Text></Text>
+                        <Text style={styles.h2}>Universidade: <Text style={styles.txt}>{nextVest.uni}</Text></Text>
+                        <Text style={styles.h2}>Curso desejado: <Text style={styles.txt}>{nextVest.curso}</Text></Text>
+                        {
+                        nextVest.site ?
+                            <Text style={styles.h2}>Site: <Text style={styles.txt}>{nextVest.site}</Text></Text> :
+                            <View />
+                        }
                     </View>
                 </View>
             </View>

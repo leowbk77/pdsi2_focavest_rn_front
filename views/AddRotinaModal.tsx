@@ -4,7 +4,7 @@ import { colors, blockColors } from "@/styles/color";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from "react";
 import DatePicker from "react-native-date-picker";
-import { TaskContent } from "@/contexts/TaskContext";
+import { TaskContent, useTaskInfo } from "@/contexts/TaskContext";
 import AddTaskBtn from "@/components/AddTaskBtn";
 import AddActivityBtn from "@/components/AddActivityBtn";
 import { CalendarUtils } from "react-native-calendars";
@@ -24,7 +24,7 @@ const AddRotinaModal = () => {
     //modal
     const [modalVisible, setModal] = useState(false);
     //hoje
-    const [today, setToday] = useState(new Date());
+    const {today} = useTaskInfo();
     // Task
     const [date, setDate] = useState(today);
     const [selectedMateria, setSelectedMateria] = useState(materias[0]);
