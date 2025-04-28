@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.placeholderText,
         marginTop: 15,
+        paddingHorizontal: 5,
     },
     txt: {
         color: colors.placeholderText,

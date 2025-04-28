@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { saveToken, getToken, deleteToken } from "@/services/storage";
 import api from "@/services/api";
+import { Buffer } from 'buffer';
 import { router } from "expo-router";
 
 const userMock: Login = {
@@ -77,15 +78,51 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
     const login = async (email: string, pw: string) => {
         try {
             console.log("login", email, pw);
-            setIsAuth(true);
+
+            const response = await api.post('/api/auth/login', {
+                email: email,
+                senha: pw
+            });
+
+            if(response.status == 201) {
+
+                setToken(response.data.body.token);
+                api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                const decodedUserToken = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString('utf-8'));
+                const userData = JSON.parse(decodedUserToken.user);
+                const userDataResponse = await api.get(`/api/usuarios/${userData.id}`);
+
+                const login: Login = {
+                    token: token,
+                    user: {
+                        id: userDataResponse.data.id,
+                        nome: userDataResponse.data.nome,
+                        email: userDataResponse.data.email,
+                        idade: userDataResponse.data.idade ? userDataResponse.data.idade : 0,
+                        cidade: userDataResponse.data.cidade ? userDataResponse.data.cidade : 'Não definido',
+                        cursos: userDataResponse.data.cursos_desejados ? userDataResponse.data.cursos_desejados : [],
+                        image: userDataResponse.data.image_url,
+                    }
+                };
+
+                setUserInfo(login);
+                await saveToken(token);
+                setIsAuth(true);
+                console.log('login');
+            }
+            
         } catch (error) {
             console.log("cannot login: ", error);
         }
     };
 
-    const logout = () => {
-        console.log("loged out");
+    const logout = async () => {
         setIsAuth(false);
+        setToken('');
+        //setUserInfo() <-- passar user vazio
+        await deleteToken();
+        api.defaults.headers.delete['Authorization'];
+        console.log("loged out");
     };
 
     const createNewUser = async (nome: string, email: string, senha: string) => {

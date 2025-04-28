@@ -9,6 +9,7 @@ import { Task, TaskContent, useTaskInfo } from "@/contexts/TaskContext";
 import MainButton from "./MainButton";
 import DatePicker from "react-native-date-picker";
 import {Picker} from '@react-native-picker/picker';
+import AddActivityBtn from "@/components/AddActivityBtn";
 
 type Props = PropsWithChildren<{
     icon?: string;
@@ -68,6 +69,7 @@ const RotinaBox = ({icon, task}: Props) => {
 
     return (
     <>
+        
         <Modal 
         transparent={true}
         visible={modalVisible}
@@ -93,18 +95,17 @@ const RotinaBox = ({icon, task}: Props) => {
                         
                         <View style={{ paddingHorizontal: 10 }}>
                             {/* MATÉRIA */}
-                            <Text style={styles.txtDecorated}>Categoria</Text>
+                            <Text style={styles.modalTxtInputLabel}>Categoria</Text>
                             <Picker
                                 selectedValue={selectedMateria}
-                                onValueChange={(itemValue) => setSelectedMateria(itemValue)}
-                            >
+                                onValueChange={(itemValue) => setSelectedMateria(itemValue)}>
                                 {materias.map((materia, i) => (
                                     <Picker.Item key={i} label={materia} value={materia} />
                                 ))}
                             </Picker>
 
                             {/* TÓPICO */}
-                            <Text style={styles.txtDecorated}>Tópico</Text>
+                            <Text style={styles.modalTxtInputLabel}>Tópico</Text>
                             <TextInput
                                 style={styles.topicInput}
                                 value={topic}
@@ -112,7 +113,7 @@ const RotinaBox = ({icon, task}: Props) => {
                             />
 
                             {/* DATA */}
-                            <Text style={styles.txtDecorated}>Data</Text>
+                            <Text style={styles.modalTxtInputLabel}>Data</Text>
                             <DatePicker
                                 date={date}
                                 onDateChange={setDate}
@@ -122,8 +123,12 @@ const RotinaBox = ({icon, task}: Props) => {
                             />
 
                             {/* ATIVIDADES */}
-                            <Text style={[styles.txtDecorated, { marginTop: 10 }]}>Atividades</Text>
-                            {taskList.length > 0 ? (
+                            <Text style={[styles.modalTxtInputLabel, { marginTop: 10 }]}>Atividades</Text>
+                            <View style={{borderWidth: 1, borderRadius: 5, borderColor: colors.borderLgrey}}>
+                                <View style={{alignSelf: 'flex-end'}}>
+                                    <AddActivityBtn onPress={() => setAddActivityModal(true)}/>
+                                </View>
+                                {taskList.length > 0 ? (
                                 taskList.map((atividade, i) => (
                                     <View key={i} style={{ marginVertical: 5 }}>
                                         <Text>{atividade.title}</Text>
@@ -136,27 +141,23 @@ const RotinaBox = ({icon, task}: Props) => {
                             ) : (
                                 <Text style={{ fontStyle: 'italic' }}>Nenhuma atividade adicionada</Text>
                             )}
-
-                            {/* BOTÃO ADICIONAR NOVA ATIVIDADE */}
-                            <View style={{ marginVertical: 10 }}>
-                                <MainButton
-                                    title="Adicionar nova atividade"
-                                    onPress={() => setAddActivityModal(true)}
-                                    size={50}
-                                />
                             </View>
+        
 
-                            {/* BOTÃO SALVAR ALTERAÇÕES */}
-                            <MainButton
-                                title="Salvar Alterações"
-                                onPress={confirmEditTask}
-                                disable={validateTaskEdit()}
-                                size={50}
-                            />
                         </View>
 
                     </ScrollView>
 
+                    {/* BOTÃO SALVAR ALTERAÇÕES */}
+                    <View style={{paddingVertical: 5, paddingHorizontal: 10}}>
+                        <MainButton
+                        title="Salvar Alterações"
+                        onPress={confirmEditTask}
+                        disable={validateTaskEdit()}
+                        size={50}
+                        />
+                    </View>
+                    
                 </View>
                 <View style={styles.modalMainBottom}/>
             </View>
@@ -255,6 +256,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     
+    topicInput:{
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: colors.borderLgrey,
+        height: 40,
+        paddingHorizontal: 5,
+    },
     txtDecorated: {
         color: colors.primary,
         fontWeight: 'bold',
@@ -291,7 +299,10 @@ const styles = StyleSheet.create({
     },
     modalContent: {
 
-    }
+    },
+    modalTxtInputLabel: {
+        fontWeight: 'bold',
+    },
 });
 
 export default RotinaBox;

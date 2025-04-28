@@ -10,22 +10,20 @@ import MainButton from "@/components/MainButton";
 import InputBox from "@/components/InputBox";
 
 const Login = () => {
-    const {loginFromJson, isAuthenticated} = useAuth();
+    const {loginFromJson, isAuthenticated, login} = useAuth();
     const [email, setEmail] = useState("");
     const [pw, setPw] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
 
     const loginApp = async () => {
-      //login
-      await loginFromJson(email, pw);
-      //login
+      await login(email, pw);
+      console.log();
     };
 
     useEffect(() => {
       if(isAuthenticated) {
         console.log('Autenticado: ',isAuthenticated);
         console.log('============================================================');
-        console.log(atob('VEVYVE8gQkFTRSBTRVNTRU5UQSBFIFFVQVRSTw=='));
         router.replace('/');
       }
     }, [isAuthenticated]);

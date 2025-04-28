@@ -288,6 +288,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: colors.borderLgrey,
         height: 40,
+        paddingHorizontal: 5,
     },
     newTasksView: {
         borderWidth: 1, //temp
