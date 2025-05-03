@@ -8,6 +8,8 @@ interface Props {
 }
 
 const NextVestBox = ({vest}: Props) => {
+    const date = new Date(vest.data);
+
     return(
         <View style={styles.main}>
             <View style={styles.top}>
@@ -19,7 +21,7 @@ const NextVestBox = ({vest}: Props) => {
             </View>
 
             <View style={styles.bottom}>
-                <Text style={styles.dateTxt}>{vest.data}</Text>
+                <Text style={styles.dateTxt}>{`${String(date.getUTCDate()).padStart(2, '0')}/${String(date.getUTCMonth() + 1).padStart(2, '0')}/${date.getUTCFullYear()}`}</Text>
             </View>
         </View>
     );

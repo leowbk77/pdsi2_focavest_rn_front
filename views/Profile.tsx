@@ -16,11 +16,18 @@ const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 const Profile = () => {
 
     const {
-        userInfo,
-        logoutJson, isAuthenticated,
+        userInfo, isAuthenticated, logout,
     } = useAuth();
 
+    const {fetchAllVests} = useVest();
+
     const {nextVest} = useVest();
+
+    const returnVestData = () => {
+        const date = new Date(nextVest.data);
+
+        return `${String(date.getUTCDate()).padStart(2, '0')}/${String(date.getUTCMonth() + 1).padStart(2, '0')}/${date.getUTCFullYear()}`
+    };
 
     useEffect(() => {
         if(!isAuthenticated) {
@@ -31,67 +38,68 @@ const Profile = () => {
       }, [isAuthenticated]);
 
     return (
-        <View style={styles.mainView}>
+        <>
+            <View style={styles.mainView}>
 
-            <Header top={top} iconhref='/config'>
-                <FontAwesome name="gear" size={24} color={colors.primary} style={styles.icon}/>
-            </Header>
+                <Header top={top} iconhref='/config'>
+                    <FontAwesome name="gear" size={24} color={colors.primary} style={styles.icon}/>
+                </Header>
 
-            <View style={styles.userInfoView}>
-                <Image source="https://cataas.com/cat" style={styles.imgPfp}/>
-                <View style={styles.userInfoTextView}>
-                    <Text style={styles.h1}>Nome do usuário</Text>
-                    <Text style={styles.txt}>{userInfo.user.nome}</Text>
-                    <Text style={styles.h1}>Idade: <Text style={styles.txt}>{userInfo.user.idade}</Text> y</Text>
-                    <Text style={styles.h1}>Cidade: <Text style={styles.txt}>{userInfo.user.cidade}</Text> </Text>
-                </View>
-            </View>
-
-            <View style={styles.vestView}>
-                <Text style={styles.h1}>Cursos desejados: <Text style={styles.txt}>{userInfo.user.cursos.join(", ")}</Text></Text>
-                <View style={styles.nextVestHeader}>
-                    <Text style={styles.h1}>Próximo vestibular</Text>
-                    <View style={styles.hr}></View>
-                    <Text style={styles.txt}>{nextVest.data}</Text>
-                </View>
-
-                <View style={styles.nextVest}>
-
-                    {
-                    nextVest.pfp ? 
-                        <Image source={nextVest.pfp} style={styles.imgPfpSm}/> :
-                        <FontAwesome name="university" size={50} color="black" />
-                    }
-                    
-                    <View style={styles.nextVestInfoView}>
-                        <Text style={styles.h2}>Universidade: <Text style={styles.txt}>{nextVest.uni}</Text></Text>
-                        <Text style={styles.h2}>Curso desejado: <Text style={styles.txt}>{nextVest.curso}</Text></Text>
-                        {
-                        nextVest.site ?
-                            <Text style={styles.h2}>Site: <Text style={styles.txt}>{nextVest.site}</Text></Text> :
-                            <View />
-                        }
+                <View style={styles.userInfoView}>
+                    <Image source="https://cataas.com/cat" style={styles.imgPfp}/>
+                    <View style={styles.userInfoTextView}>
+                        <Text style={styles.h1}>Nome do usuário</Text>
+                        <Text style={styles.txt}>{userInfo.user.nome}</Text>
+                        <Text style={styles.h1}>Idade: <Text style={styles.txt}>{userInfo.user.idade > 0 ? String(userInfo.user.idade) + 'y' : 'Não informado'}</Text></Text>
+                        <Text style={styles.h1}>Cidade: <Text style={styles.txt}>{userInfo.user.cidade}</Text> </Text>
                     </View>
                 </View>
-            </View>
 
-            <View style={styles.vestsView}>
-                <View style={{flexDirection: 'row'}}>
-                    <Text style={styles.h1}>Vestibulares</Text>
-                    <View style={styles.hr2}/>
+                <View style={styles.vestView}>
+                    <Text style={styles.h1}>Cursos desejados: <Text style={styles.txt}>{userInfo.user.cursos.join(", ")}</Text></Text>
+                    <View style={styles.nextVestHeader}>
+                        <Text style={styles.h1}>Próximo vestibular</Text>
+                        <View style={styles.hr}></View>
+                        <Text style={styles.txt}>{returnVestData()}</Text>
+                    </View>
+
+                    <View style={styles.nextVest}>
+
+                        {
+                        nextVest.pfp ? 
+                            <Image source={nextVest.pfp} style={styles.imgPfpSm}/> :
+                            <FontAwesome name="university" size={50} color="black" />
+                        }
+                        
+                        <View style={styles.nextVestInfoView}>
+                            <Text style={styles.h2}>Universidade: <Text style={styles.txt}>{nextVest.uni}</Text></Text>
+                            {
+                            nextVest.site ?
+                                <Text style={styles.h2}>Site: <Text style={styles.txt}>{nextVest.site}</Text></Text> :
+                                <View />
+                            }
+                        </View>
+                    </View>
                 </View>
-                
-                <Vests/>
-                
-            </View>
 
-            <View style={styles.logoutView}>
-                <Pressable style={{flexDirection: 'row'}} onPress={logoutJson}>
-                    <MaterialIcons name="logout" size={24} color={colors.primary} />
-                    <Text>Sair</Text>
-                </Pressable>
+                <View style={styles.vestsView}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={styles.h1}>Vestibulares</Text>
+                        <View style={styles.hr2}/>
+                    </View>
+                    
+                    <Vests/>
+                    
+                </View>
+
+                <View style={styles.logoutView}>
+                    <Pressable style={{flexDirection: 'row'}} onPress={logout}>
+                        <MaterialIcons name="logout" size={24} color={colors.primary} />
+                        <Text>Sair</Text>
+                    </Pressable>
+                </View>
             </View>
-        </View>
+        </>
     );
 };
 

@@ -30,7 +30,7 @@ const DailyActivities = () => {
                     contentContainerStyle={styles.listContainer}
                     ItemSeparatorComponent={() => <View style={{ width: 10 }} />}/>
                     :
-                    <Text style={styles.noActivitiesTxt}>Sem atividades cadastradas</Text>
+                    <Text style={styles.noActivitiesTxt}>Sem atividades pra hoje!</Text>
                 }
             </View>
         </View>

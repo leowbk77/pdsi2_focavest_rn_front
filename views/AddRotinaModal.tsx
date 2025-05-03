@@ -48,7 +48,7 @@ const AddRotinaModal = () => {
     */
     const confirmAddTask = () => {
         const newTask: Task = {
-            id: '',
+            id: Date.now().toString(),
             materia: selectedMateria,
             topico: topic,
             data: formatDateToTaskContent(date),
@@ -83,6 +83,9 @@ const AddRotinaModal = () => {
         setTasks(prev => [...prev, newActivity]);
         setStartDate("");
         setEndDate("");
+        setTaskTitle('');
+        setTaskSummary('');
+        setModal(!modalVisible);
     };
 
     /*

@@ -4,7 +4,7 @@
     "slug": "FocaVestFrontRn",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/adaptive-iconFV.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/FocaVestPLogo.png",
+        "foregroundImage": "./assets/images/adaptive-iconFV.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.leowbk.FocaVestFrontRn"

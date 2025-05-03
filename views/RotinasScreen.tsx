@@ -12,6 +12,7 @@ import {Platform, StatusBar } from 'react-native';
 import { useEffect } from "react";
 import { iconLecture } from "@/components/LectureIcons";
 
+
 const top = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
 const RotinasScreen = () => {

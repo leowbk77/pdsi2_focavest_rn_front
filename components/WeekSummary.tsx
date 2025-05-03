@@ -8,7 +8,7 @@ const WeekSummary = () => {
 
             <View style={styles.hoursView}>
                 <View style={styles.circle}>
-                    <Text style={{color: colors.primary, fontSize: 20, fontWeight: 'bold',}}>{'80'}%</Text>
+                    <Text style={{color: colors.primary, fontSize: 20, fontWeight: 'bold',}}>{'0'}%</Text>
                 </View>
 
                 <View style={styles.hoursTxtView}>
@@ -24,7 +24,7 @@ const WeekSummary = () => {
 
             <View style={styles.mostStudiedView}>
                 <Text style={styles.mostStudiedTxt}>Mais estudada: </Text>
-                <Text style={[styles.mostStudiedTxt,{color: colors.primary}]}>{'Matemática'}</Text>
+                <Text style={[styles.mostStudiedTxt,{color: colors.primary}]}>{}</Text>
             </View>
 
         </View>

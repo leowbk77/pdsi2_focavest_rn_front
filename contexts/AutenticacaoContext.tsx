@@ -4,21 +4,7 @@ import api from "@/services/api";
 import { Buffer } from 'buffer';
 import { router } from "expo-router";
 
-const userMock: Login = {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywiaWF0IjoxNjkxMjM4NzYyLCJleHAiOjE2OTEyNDIzNjJ9.D2Vsb2dvLXVzZXItYXV0aC10b2tlbg",
-    "user": {
-      "id": "123",
-      "nome": "João da Silva",
-      "email": "joao.silva@email.com",
-      "idade": 28,
-      "cidade": "São Paulo",
-      "cursos": [
-        "Ciência da Computação",
-        "Engenharia de Software",
-        "Análise e Desenvolvimento de Sistemas"],
-      "image": "https://cataas.com/cat"
-    }
-};
+import { ToastAndroid, Platform, Alert } from "react-native";
 
 const emptyUser: Login = {
     token: '', 
@@ -38,11 +24,11 @@ interface AutenticacaoContextType {
     isAuthenticated: boolean;
     userInfo: Login,
 
+    showToast: (mensagem: string) => void;
+
+    editUser: (user: User) => void;
     login: (email: string, pw: string) => Promise<void>;
     logout: () => void;
-
-    loginFromJson: (email: string, pw: string) => Promise<void>;
-    logoutJson: () => void;
 
     createNewUser: (nome:string, email:string, senha:string) => Promise<void>;
 };
@@ -73,7 +59,15 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
     const [token, setToken] = useState<string>('');
     const [isAuthenticated, setIsAuth] = useState(false);
 
-    const [userInfo, setUserInfo] = useState<Login>(userMock);
+    const [userInfo, setUserInfo] = useState<Login>(emptyUser);
+
+    const showToast = (mensagem: string) => {
+        if (Platform.OS === "android") {
+            ToastAndroid.show(mensagem, ToastAndroid.SHORT);
+        } else {
+            Alert.alert(mensagem);
+        }
+    };
     
     const login = async (email: string, pw: string) => {
         try {
@@ -85,12 +79,12 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
             });
 
             if(response.status == 201) {
-
-                setToken(response.data.body.token);
-                api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                const decodedUserToken = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString('utf-8'));
-                const userData = JSON.parse(decodedUserToken.user);
-                const userDataResponse = await api.get(`/api/usuarios/${userData.id}`);
+                const receivedToken = response.data.body.token;
+                setToken(receivedToken);
+                api.defaults.headers.common['Authorization'] = `Bearer ${receivedToken}`;
+                const userParFromToken = Buffer.from(receivedToken.split('.')[1], 'base64').toString('utf-8');
+                const decodedUserToken = JSON.parse(userParFromToken);
+                const userDataResponse = await api.get(`/api/usuarios/${decodedUserToken.user.id}`);
 
                 const login: Login = {
                     token: token,
@@ -99,7 +93,7 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
                         nome: userDataResponse.data.nome,
                         email: userDataResponse.data.email,
                         idade: userDataResponse.data.idade ? userDataResponse.data.idade : 0,
-                        cidade: userDataResponse.data.cidade ? userDataResponse.data.cidade : 'Não definido',
+                        cidade: userDataResponse.data.cidade ? userDataResponse.data.cidade : 'Não informado',
                         cursos: userDataResponse.data.cursos_desejados ? userDataResponse.data.cursos_desejados : [],
                         image: userDataResponse.data.image_url,
                     }
@@ -108,10 +102,11 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
                 setUserInfo(login);
                 await saveToken(token);
                 setIsAuth(true);
-                console.log('login');
+                showToast("login bem sucedido");
             }
             
         } catch (error) {
+            showToast("erro de login - tente novamente");
             console.log("cannot login: ", error);
         }
     };
@@ -121,61 +116,44 @@ export const AutenticacaoProvider = ({children}: AuthProviderProps) => {
         setToken('');
         //setUserInfo() <-- passar user vazio
         await deleteToken();
-        api.defaults.headers.delete['Authorization'];
-        console.log("loged out");
+        delete api.defaults.headers.common['Authorization'];
+        showToast("loged out");
     };
 
     const createNewUser = async (nome: string, email: string, senha: string) => {
-        const newUser = {
-            nome: nome,
-            email: email,
-            senha: senha,
-        };
-
         try {
-            console.log('enviando registro: ', nome, email, senha);
-            const response = await api.post('https://focavest-backend.onrender.com/api/auth/register', newUser).then((response) => {console.log(response)});
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-
-    /* ============================================== MOCK ==============================================*/
-    const loginFromJson = async (email: string, pw: string) => {
-        try {
-            if(userInfo.user.email == email) {
-                setToken(userInfo.token);
-                // api.defaults.headers.common['Authorization'] = `Bearer ${receivedToken}`;
-                await saveToken(userInfo.token);
-                setIsAuth(true);
-                console.log('login');
+            console.log('Enviando registro: ', nome, email, senha);
+            
+            const response = await api.post('/api/auth/register', {
+                nome: nome,
+                email: email,
+                senha: senha
+            });
+    
+            if (response.status === 201 || response.status === 200) {
+                showToast("Usuário criado com sucesso!");
+            } else {
+                showToast("Erro ao criar usuário");
             }
         } catch (error) {
-            console.log("cannot login: ", error);
+            console.log("Erro ao criar usuário:", error);
+            showToast("Erro ao criar usuário");
         }
     };
 
-    const logoutJson = async () => {
-        if(isAuthenticated) {
-            setToken('');
-            setUserInfo(emptyUser);
-            await deleteToken();
-            setIsAuth(false);
-            console.log('Logout');
-            //router.replace('/');
-            // delete api.defaults.headers.common['Authorization'];
-        }
+    const editUser = (user: User) => {
+        setUserInfo({
+            token: token,
+            user: user
+        });
     };
-    /* ============================================== MOCK FROM JSON ==============================================*/
 
     return(
         <AutenticacaoContext.Provider value={{
             token, isAuthenticated,
-            userInfo,
-
+            userInfo, showToast,
+            editUser,
             login, logout,
-            loginFromJson, logoutJson,
 
             createNewUser,
         }}>

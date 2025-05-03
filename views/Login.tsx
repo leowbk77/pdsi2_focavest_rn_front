@@ -10,20 +10,17 @@ import MainButton from "@/components/MainButton";
 import InputBox from "@/components/InputBox";
 
 const Login = () => {
-    const {loginFromJson, isAuthenticated, login} = useAuth();
-    const [email, setEmail] = useState("");
-    const [pw, setPw] = useState("");
+    const {isAuthenticated, login} = useAuth();
+    const [email, setEmail] = useState<string>("");
+    const [pw, setPw] = useState<string>("");
     const [rememberMe, setRememberMe] = useState(false);
 
     const loginApp = async () => {
       await login(email, pw);
-      console.log();
     };
 
     useEffect(() => {
       if(isAuthenticated) {
-        console.log('Autenticado: ',isAuthenticated);
-        console.log('============================================================');
         router.replace('/');
       }
     }, [isAuthenticated]);
@@ -54,14 +51,6 @@ const Login = () => {
                   <View style={styles.inputBoxView}>
                     <InputBox title={"Senha"} bkgColor={colors.secondary} isSecure={true} onChangeText={text => {setPw(text)}}/>
                   </View>
-                </View>
-
-                <View style={styles.pwOptionsView}>
-                  <View style={styles.pwRememberMeView}>
-                    <Checkbox color={colors.primary} value={rememberMe} onValueChange={setRememberMe}/>
-                    <Text style={styles.pwRememberMeTxt}>Lembrar-me</Text>
-                  </View>
-                  <Link href="/sign-up" style={styles.link}> Esqueceu a senha?</Link>
                 </View>
 
                 <View style={styles.btnView}>
@@ -141,3 +130,12 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
+
+
+{/* <View style={styles.pwOptionsView}>
+<View style={styles.pwRememberMeView}>
+  <Checkbox color={colors.primary} value={rememberMe} onValueChange={setRememberMe}/>
+  <Text style={styles.pwRememberMeTxt}>Lembrar-me</Text>
+</View>
+<Link href="/sign-up" style={styles.link}> Esqueceu a senha?</Link>
+</View> */}

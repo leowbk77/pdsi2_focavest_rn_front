@@ -1,5 +1,5 @@
 import { Modal, StyleSheet, Text, View, Pressable, ScrollView, TextInput, } from "react-native";
-import { colors } from "@/styles/color";
+import { blockColors, colors } from "@/styles/color";
 import { PropsWithChildren, useState } from "react";
 import Checkbox from "expo-checkbox";
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -10,6 +10,7 @@ import MainButton from "./MainButton";
 import DatePicker from "react-native-date-picker";
 import {Picker} from '@react-native-picker/picker';
 import AddActivityBtn from "@/components/AddActivityBtn";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 type Props = PropsWithChildren<{
     icon?: string;
@@ -17,13 +18,13 @@ type Props = PropsWithChildren<{
 }>;
 
 const RotinaBox = ({icon, task}: Props) => {
+    const {materias, today, tasks, addTask, removeTask,} = useTaskInfo();
+
     const [isChecked, setChecked] = useState(false);
     const [boxId, setBoxId] = useState(task.id);
+
+    // modal de edição
     const [modalVisible, setModal] = useState(false);
-
-    const {materias, today, tasks, addTask, removeTask} = useTaskInfo();
-
-    // Estados para edição
     const [selectedMateria, setSelectedMateria] = useState(task.materia);
     const [topic, setTopic] = useState(task.topico);
     const [date, setDate] = useState(new Date(task.data));
@@ -31,8 +32,44 @@ const RotinaBox = ({icon, task}: Props) => {
 
     // Modal de adicionar atividade
     const [addActivityModal, setAddActivityModal] = useState(false);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [title, setTaskTitle] = useState('');
+    const [summary, setTaskSummary] = useState('');
+    const [selectedColor, setSelectedColor] = useState(blockColors[0].hex);
 
     // Funções auxiliares
+    
+    const removeRotina = () => {
+        removeTask(task.id);
+    };
+
+    const addActivity = () => {
+        const id = Date.now().toString(); // Gera ID único baseado no timestamp atual -> obrigado GPT
+        const newActivity: TaskContent = {
+            id: id,
+            start: startDate,
+            end: endDate,
+            title: title,
+            summary: summary,
+            color: selectedColor,
+        };
+
+        if(startDate === "") {
+            const start = formatDateToTaskContent(today);
+            newActivity.start = start;
+        }
+        if(endDate === "") {
+            const end = formatDateToTaskContent(today);
+            newActivity.end = end;
+        }
+        
+        setTaskList(prev => [...prev, newActivity]);
+        setStartDate("");
+        setEndDate("");
+        setAddActivityModal(!addActivityModal);
+    };
+
     const removeActivity = (id: string) => {
         setTaskList(prev => prev.filter(task => task.id !== id));
     };
@@ -44,17 +81,22 @@ const RotinaBox = ({icon, task}: Props) => {
             topico: topic,
             data: formatDateToTaskContent(date),
             tasks: taskList,
-            tempototal: taskList.length * 10, // Exemplo: cada atividade vale 10min
+            //tempototal: taskList.length * 10, // Exemplo: cada atividade vale 10min
         };
 
         // Remove a antiga e adiciona a nova
         removeTask(task.id);
         addTask(editedTask);
         setModal(false);
+        console.log(editedTask);
     };
 
-    const validateTaskEdit = () => {
+    const validateTaskEdit = (): boolean => {
         return topic.length <= 3;
+    };
+
+    const validateActivityAdd = (): boolean => {
+        return title.length <= 3;
     };
 
     const formatDateToTaskContent = (date: Date) => {
@@ -62,13 +104,77 @@ const RotinaBox = ({icon, task}: Props) => {
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     };
 
-    const butao = () => {
+    const butao = async () => {
         setChecked(!isChecked);
         console.log(icon, boxId);
     };
 
     return (
-    <>
+    <>  
+        <Modal
+        transparent={true}
+        visible={addActivityModal}
+        onRequestClose={() => {setAddActivityModal(!addActivityModal)}}>
+            <View style={styles.activityModalMain}>
+                <View style={styles.activityModalMainTop}></View>
+                <View style={styles.activityModalMainMid}>
+
+                    <ScrollView showsVerticalScrollIndicator={false}>
+
+                        <View style={styles.activityModalHeader}>
+                            <View>
+                                <Pressable onPress={() => {setAddActivityModal(!addActivityModal)}}>
+                                    <Ionicons name="return-up-back" size={24} color={colors.primary} />
+                                </Pressable>
+                            </View>
+                            <View>
+                                <Text style={styles.modalHeaderTxt}>ADICIONAR ATIVIDADE</Text>
+                            </View>
+                            <View />
+                            <View />
+                        </View>
+                        
+
+                        <View style={styles.activityModalStartEndView}>
+
+                            <View style={{flex: 1}}>
+                                <Text style={styles.activityModalStartEndTxt}>Inicio</Text>
+                                <DatePicker style={{alignSelf: 'center'}} date={today} onDateChange={(date) => setStartDate(formatDateToTaskContent(date))} mode="time" theme="light" dividerColor={colors.primary}/>
+                            </View>
+                            <View style={{flex: 1}}>
+                                <Text style={styles.activityModalStartEndTxt}>Fim</Text>
+                                <DatePicker style={{alignSelf: 'center'}} date={today} onDateChange={(date) => setEndDate(formatDateToTaskContent(date))} mode="time" theme="light" dividerColor={colors.primary}/>
+                            </View>
+
+                        </View>
+                        
+                        <View style={styles.activityModalTxtInputsView}>
+                            <View>
+                                <Text style={styles.modalTxtInputLabel}>Título</Text>
+                                <TextInput style={styles.topicInput} value={title} onChangeText={setTaskTitle}/>
+                            </View>
+                            <View>
+                                <Text style={styles.modalTxtInputLabel}>Descrição</Text>
+                                <TextInput style={styles.topicInput} value={summary} onChangeText={setTaskSummary}/>
+                            </View>
+                            <View>
+                                <Text style={styles.modalTxtInputLabel}>Cor</Text>
+                                <Picker
+                                selectedValue={selectedColor}
+                                onValueChange={(itemValue, itemIndex) => setSelectedColor(itemValue)}>
+                                    {blockColors.map((color, i) => <Picker.Item key={i} style={{backgroundColor: color.hex, }} label={color.cor} value={color.hex}/>)}
+                                </Picker>
+                            </View>
+                        </View>
+                        <View style={styles.activityModalAddActivityBtn}>
+                            <MainButton title='Adicionar' disable={validateActivityAdd()} onPress={addActivity} size={50}/>
+                        </View>
+
+                    </ScrollView>
+                </View>
+                <View style={styles.activityModalMainBottom}></View>
+            </View>
+        </Modal>
         
         <Modal 
         transparent={true}
@@ -193,6 +299,11 @@ const RotinaBox = ({icon, task}: Props) => {
             <View style={styles.rightView}>
 
                 <Checkbox color={colors.primary} value={isChecked} onValueChange={butao}/>
+                <View>
+                    <Pressable onPress={removeRotina}>
+                        <MaterialIcons name="delete-forever" size={24} color={colors.primary} />
+                    </Pressable>
+                </View>
                 <View style={{}}>
                     <Pressable
                     onPress={() => {setModal(true)}}>
@@ -302,6 +413,52 @@ const styles = StyleSheet.create({
     },
     modalTxtInputLabel: {
         fontWeight: 'bold',
+    },
+
+    
+    activityModalMain: {
+        flex: 1,
+
+    },
+    activityModalMainTop: {
+        flex: 1,
+    },
+    activityModalMainMid: {
+        flex: 8,
+        backgroundColor: colors.viewWBackground,
+        marginHorizontal: '1%',
+        borderRadius: 5,
+        boxShadow: '1 1 5 1 black',
+    },
+    activityModalMainBottom: {
+        flex: 1,
+    },
+    activityModalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginVertical: 18,
+    },
+    activityModalHeaderTxt: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    activityModalStartEndView: {
+        flexDirection: 'row'
+    },
+    activityModalStartEndTxt: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    activityModalTxtInputLabel: {
+        fontWeight: 'bold',
+    },
+    activityModalTxtInputsView: {
+        paddingHorizontal: 5,
+    },
+    activityModalAddActivityBtn: {
+        paddingHorizontal: 50,
+        marginTop: 10,
     },
 });
 

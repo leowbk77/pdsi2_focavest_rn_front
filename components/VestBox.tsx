@@ -2,6 +2,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Vest } from '@/contexts/VestContext';
 import { colors } from '@/styles/color';
+import { Image } from 'expo-image';
 
 interface Props {
     vest: Vest,
@@ -10,7 +11,12 @@ interface Props {
 const VestBox = ({vest}: Props) => {
     return(
         <View style={styles.main}>
-            <FontAwesome name="university" size={24} color="black" />
+            {
+            vest.pfp ? 
+                <Image source={vest.pfp} style={{width: 30, height: 30, borderRadius: 10 }}/> :
+                <FontAwesome name="university" size={24} color="black" />
+            }
+            
             <Text numberOfLines={2}>{vest.uni}</Text>
         </View>
     );

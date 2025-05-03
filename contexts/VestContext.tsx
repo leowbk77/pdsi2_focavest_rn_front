@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode , useEffect} from "react";
 import api from "@/services/api";
+import { useAuth } from "./AutenticacaoContext";
 
 // icone
 // <a href="https://www.flaticon.com/free-icons/university" title="university icons">University icons created by Smashicons - Flaticon</a>
@@ -7,51 +8,19 @@ import api from "@/services/api";
 // mock
 const vestsMock = [
   {
-    "id": "1",
-    "data": "27/04/2025",
-    "pfp": "https://feciv.ufu.br/sites/feciv.ufu.br/files/ufu.png",
-    "uni": "Universidade Federal de Uberlândia",
-    "curso": "Sistemas de Informação",
-    "site": "ufu.br/"
+    "id": "",
+    "data": "",
+    "pfp": "",
+    "uni": "",
+    "curso": "",
+    "site": ""
   },
-  {
-    "id": "2",
-    "data": "12/05/2025",
-    "pfp": "https://www.unicamp.br/unicamp/sites/default/files/logo-unicamp-2020.png",
-    "uni": "Universidade Estadual de Campinas",
-    "curso": "Engenharia da Computação",
-    "site": "vestibular.unicamp.br/"
-  },
-  {
-    "id": "3",
-    "data": "05/06/2025",
-    "pfp": "https://www5.usp.br/wp-content/themes/usp/images/logo-usp.png",
-    "uni": "Universidade de São Paulo",
-    "curso": "Ciência da Computação",
-    "site": "fuvest.br/"
-  },
-  {
-    "id": "4",
-    "data": "18/06/2025",
-    "pfp": "https://www.uerj.br/wp-content/uploads/2020/05/Marca_Uerj_Negativa-1024x319.png",
-    "uni": "Universidade do Estado do Rio de Janeiro",
-    "curso": "Engenharia de Software",
-    "site": "uerj.br/vestibular/"
-  },
-  {
-    "id": "5",
-    "data": "30/06/2025",
-    "pfp": "https://portal.ufpa.br/images/LogoUFPA.png",
-    "uni": "Universidade Federal do Pará",
-    "curso": "Análise e Desenvolvimento de Sistemas",
-    "site": "ceps.ufpa.br/"
-  }
 ];
 
 const nextVestMock: Vest = {
   "id": "6",
   "data": "27/04/2025",
-  "pfp": "", //https://feciv.ufu.br/sites/feciv.ufu.br/files/ufu.png
+  "pfp": "https://feciv.ufu.br/sites/feciv.ufu.br/files/ufu.png", //
   "uni": "Universidade Federal de Uberlândia",
   "curso": "Sistemas de Informação",
   "site": "ufu.br/"
@@ -75,29 +44,102 @@ export interface Vest {
 interface VestContext {
     vests: Vest[];
     nextVest: Vest;
-    addVest: (vest: Vest) => void;
+    allVests: Vest[];
+    addVest: (id: string) => void;
     removeVest: (id: string) => void;
+    fetchAllVests: () => Promise<void>;
+    fetchNextVest: () => void;
+    fetchUserVests: () => void;
 }
 //\interfaces
 
 export const VestContext = createContext<VestContext | undefined>(undefined);
 
 export const VestContextProvider = ({children,}: VestProviderProps) => {
-    const [vests, setVests] = useState<Vest[]>(vestsMock);
+    const {isAuthenticated, userInfo, showToast} = useAuth();
+    const [vests, setVests] = useState<Vest[]>([]);
+    const [allVests, setAllVests] = useState<Vest[]>([]);
     const [nextVest, setNextVest] = useState<Vest>(nextVestMock);
 
-    const addVest = async (vest: Vest) => {
-        setVests(prev => [...prev, vest]);
+    useEffect(() => {
+      if(isAuthenticated){
+          fetchAllVests();
+          fetchNextVest();
+          fetchUserVests();
+        };
+    }, [isAuthenticated]);
+
+    const fetchAllVests = async () => {
+      try {
+        const response = await api.get('/api/vestibulares');
+        if(response.status == 200){
+          setAllVests(response.data);
+        };
+      } catch (error) {
+        showToast('Erro ao buscar vestibulares');
+        console.log('cant fetch vests: ', error);
+      }
+    };
+
+    const fetchUserVests = async () => {
+      try {
+        const response = await api.get('/api/vestibulares');
+        if(response.status == 200){
+          setVests(response.data);
+        };
+      } catch (error) {
+        showToast('Erro ao buscar vestibulares selecionados');
+        console.log('cant fetch vests: ', error);
+      }
+    };
+
+    const addVest = async (id: string) => {
+        try {
+          const response = await api.post('/api/vestibular-usuario', {
+            usuario_id: userInfo.user.id,
+            vestibular_id: id
+          });
+          if(response.status == 201){
+            showToast('Vestibular adicionado!');
+          };
+        } catch (error) {
+          showToast('Vestibular não pode ser adicionado');
+          console.log('error: ', error);
+        }
     };
 
     const removeVest = async (id: string) => {
         setVests((prev) => prev.filter((t) => t.id !== id));
     };
 
+    const fetchNextVest = async ()=> {
+      try {
+        const response = await api.get(`/api/vestibular-usuario/${userInfo.user.id}/proximo`);
+        if(response.status == 200){
+          setNextVest(
+            {
+              "id": response.data.body.id,
+              "data": response.data.body.data,
+              "pfp": response.data.body.pfp,
+              "uni": response.data.body.uni,
+              "curso": response.data.body.curso,
+              "site": response.data.body.site
+            });
+        };
+    
+      } catch (error) {
+        showToast('Próximo vestibular não encontrado.');
+        console.log('cant fetch vests: ', error);
+      }
+    };
+
     return(
         <VestContext.Provider value={{
             vests, nextVest,
+            allVests, 
             addVest, removeVest,
+            fetchAllVests, fetchNextVest,
+            fetchUserVests,
         }}>
             {children}
         </VestContext.Provider>

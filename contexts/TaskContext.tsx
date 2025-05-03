@@ -1,7 +1,9 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect  } from "react";
 import api from "@/services/api";
 import { CalendarUtils } from "react-native-calendars";
 import { lectures } from "@/components/LectureIcons";
+import * as Notifications from 'expo-notifications';
+import { useAuth } from "./AutenticacaoContext";
 
 // mock
 const tasksMock : Task[] = [
@@ -15,56 +17,6 @@ const tasksMock : Task[] = [
             {start: '2025-04-13 09:20:00', end: '2025-04-13 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
             {start: '2025-04-13 20:00:00', end: '2025-04-13 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
     },
-    {
-        id: "2",
-        materia: 'Física',
-        topico: 'Física 1',
-        tempototal: 14,
-        data: '2025-04-14',
-        tasks: [
-            {start: '2025-04-14 09:20:00', end: '2025-04-14 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
-            {start: '2025-04-14 20:00:00', end: '2025-04-14 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
-    },
-    {
-        id: "3",
-        materia: 'Matemática',
-        topico: 'Matematica 1',
-        tempototal: 10,
-        data: '2025-04-21',
-        tasks: [
-            {start: '2025-04-21 09:20:00', end: '2025-04-21 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
-            {start: '2025-04-21 20:00:00', end: '2025-04-21 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
-    },
-    {
-        id: "4",
-        materia: 'Matemática',
-        topico: 'Matematica 1',
-        tempototal: 8,
-        data: '2025-04-21',
-        tasks: [
-            {start: '2025-04-21 09:20:00', end: '2025-04-21 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
-            {start: '2025-04-21 20:00:00', end: '2025-04-21 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
-    },
-    {
-        id: "5",
-        materia: 'Física',
-        topico: 'Física 1',
-        tempototal: 7,
-        data: '2025-04-17',
-        tasks: [
-            {start: '2025-04-17 09:20:00', end: '2025-04-17 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
-            {start: '2025-04-17 20:00:00', end: '2025-04-17 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
-    },
-    {
-        id: "6",
-        materia: 'Física',
-        topico: 'Física 2',
-        tempototal: 8,
-        data: '2025-04-25',
-        tasks: [
-            {start: '2025-04-25 09:20:00', end: '2025-04-25 12:00:00', title: 'Teste', summary: 'Teste', color: '#e6add8', id: '1'}, 
-            {start: '2025-04-25 20:00:00', end: '2025-04-25 20:20:00', title: 'Apresentação', summary: 'pdsi2', color: '#e6add8', id: '2'}]
-    }
 ];
 // \mock
 
@@ -84,7 +36,7 @@ export interface TaskContent {
 
 export interface Task {
     id: string,
-    materia: string, // number ? identificar as materias por enum
+    materia: string,
     topico: string,
     tempototal?: number,
     data: string,
@@ -98,22 +50,80 @@ interface TaskContext {
     addTask: (task: Task) => void;
     removeTask: (date: string) => void;
     todayTasks: () => Task[];
+    editTask: (task:Task) => void;
 }
 // \interfaces
 
 export const TaskContext = createContext<TaskContext | undefined>(undefined);
 
 export const TaskContextProvider = ({children,}: TaskProviderProps) => {
-    const [tasks, setTasks] = useState<Task[]>(tasksMock);
+    
+    const {isAuthenticated, userInfo, showToast} = useAuth();
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [progresso, setProgresso] = useState('');
     const today = new Date();
     const materias = lectures;
 
+    useEffect(() => {
+        if(isAuthenticated){
+            fetchUserRotinas();
+            fetchProgresso();
+          };
+      }, [isAuthenticated]);
+    
+
+    const fetchUserRotinas = async () => {
+        try {
+            const response = await api.get(`/api/rotinas/${userInfo.user.id}`);
+            if(response.status == 200){
+                showToast('Rotinas carregadas');
+            };
+            
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
+
+    const fetchProgresso = async () => {
+      try {
+        const response = await api.get(`/api/rotinas/progresso/${userInfo.user.id}`);
+        if(response.status == 200){
+          console.log(response.data);
+        };
+      } catch (error) {
+        showToast('Erro ao buscar o progresso semanal');
+        console.log('cant fetch vests: ', error);
+      }
+    };
+
     const addTask = async (task: Task) => {
         setTasks(prev => [...prev, task]);
+        showToast('Rotina adicionada');
+        /*
+        try {
+            const response = await api.post('/api/rotinas', {
+                nome: userInfo.user.nome,
+                descricao: task.topico,
+                materia: task.materia,
+                topico: task.topico,
+                data: task.data,
+                usuarioId: userInfo.user.id,
+            });
+            if(response.status == 200){
+
+            };
+            
+        } catch (error) {
+            console.log('erro', error);
+        }*/
     };
 
     const removeTask = async (id: string) => {
         setTasks((prev) => prev.filter((t) => t.id !== id));
+    };
+
+    const editTask = async (task: Task) => {
+        setTasks((prev) => prev.map((t) => t.id === task.id ? task : t));
     };
 
     const todayTasks = () => {
@@ -127,7 +137,7 @@ export const TaskContextProvider = ({children,}: TaskProviderProps) => {
             tasks,
             materias,
             addTask, removeTask,
-            todayTasks
+            editTask, todayTasks,
         }}>{children}
         </TaskContext.Provider>);
 };
